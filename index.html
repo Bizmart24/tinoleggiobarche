@@ -65,7 +65,8 @@ h1,h2,h3{font-family:var(--display);font-weight:600;text-wrap:balance;line-heigh
 .ibtn{width:38px;height:38px;border-radius:50%;background:var(--chip);display:flex;align-items:center;justify-content:center}
 .ibtn svg{width:19px;height:19px}
 
-.blogo{height:40px;width:auto;border-radius:10px;background:#fff;padding:4px 8px;display:block}
+.tools{gap:6px}
+.blogo{height:36px;width:auto;border-radius:10px;background:#fff;padding:4px 8px;display:block}
 .top .brand small{display:none}
 /* hero */
 .hero{position:relative;margin:12px 12px 0;border-radius:28px;min-height:310px;display:flex;align-items:flex-end;color:#fff;background:linear-gradient(165deg,#0aa3a6,#35c6c0 55%,#ffc24d 130%);overflow:hidden}
@@ -551,6 +552,21 @@ div.pick{cursor:default}
   @keyframes tBlink{50%{opacity:.25}}
 }
 
+/* area personale e prenotazione con conferma */
+.acct{z-index:44}
+.tino.adm-mode{z-index:47}
+.lvl{flex:0 0 54px;height:8px;border-radius:4px;background:rgba(0,0,0,.12);overflow:hidden;display:block}
+.lvl i{display:block;height:100%;width:0;background:#e0245e;border-radius:4px;animation:none!important}
+.ad-tino{display:flex;align-items:center;gap:6px;color:#fff;font-weight:800;font-size:13px;border-radius:999px;height:38px;padding:0 12px 0 3px;background:rgba(255,255,255,.18)}
+.ad-tino img{width:32px;height:32px;border-radius:50%;object-fit:cover;object-position:50% 20%;background:#e8f7f6}
+.doc-st{font-size:12px;font-weight:800;border-radius:999px;padding:4px 10px;white-space:nowrap;background:var(--chip)}
+.d-to_review,.d-uploading,.d-processing{background:rgba(255,194,77,.38)}.d-approved{background:rgba(22,132,91,.22)}.d-rejected,.d-unreadable,.d-expired{background:rgba(200,57,31,.18)}.d-to_update{background:rgba(255,115,82,.25)}
+.tips{font-size:13px;color:var(--muted);margin:8px 0;padding-left:18px}
+.tips li{margin:2px 0}
+.dprev{max-width:100%;max-height:240px;border-radius:14px;display:block;margin:8px 0;background:#fff}
+.rb-code{font-family:var(--display);font-size:30px;font-weight:600;letter-spacing:1px;text-align:center;margin:10px 0;color:var(--water)}
+.rb-big{font-family:var(--display);font-size:21px;font-weight:600;text-align:center;margin-top:8px}
+
 /* galleria a tutto schermo */
 .lb{position:fixed;inset:0;z-index:50;background:rgba(3,22,26,.95);display:none;align-items:center;justify-content:center}
 .lb.on{display:flex}
@@ -577,6 +593,7 @@ div.pick{cursor:default}
       <div class="lgw"><button class="ibtn" id="langBtn" aria-haspopup="true" aria-expanded="false" aria-label="Lingua / Sprache / Langue / Language"></button><div class="lgm" id="langMenu" hidden></div></div>
       <select id="langSel" class="lang" hidden aria-hidden="true" tabindex="-1"><option value="it">IT</option><option value="de">DE</option><option value="fr">FR</option><option value="en">EN</option></select>
       <button class="ibtn" id="themeBtn" aria-label="Tema"></button>
+      <button class="ibtn" id="userBtn" aria-label="Area personale"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.600-7 8-7s8 3 8 7"/></svg></button>
       <button class="ibtn" id="lockBtn" aria-label="Area riservata"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 018 0v3"/></svg></button>
     </div>
   </header>
@@ -606,6 +623,7 @@ div.pick{cursor:default}
 <div class="pin" id="pin" role="dialog" aria-modal="true" aria-labelledby="pinT"><div class="pin-c"><h2 id="pinT">Area riservata</h2><p id="pinMsg"></p><div class="dots" id="pinDots"></div>
   <div class="pad"><button data-p="1">1</button><button data-p="2">2</button><button data-p="3">3</button><button data-p="4">4</button><button data-p="5">5</button><button data-p="6">6</button><button data-p="7">7</button><button data-p="8">8</button><button data-p="9">9</button><button data-p="x" class="alt">Chiudi</button><button data-p="0">0</button><button data-p="del" class="alt" aria-label="Cancella">⌫</button></div></div></div>
 <div class="adm" id="admin"></div>
+<div class="adm acct" id="acct"></div>
 
 <div class="scrim" id="scrim" role="dialog" aria-modal="true" aria-labelledby="sheetTitle">
   <div class="sheet" id="sheet"></div>
@@ -971,6 +989,7 @@ function vContact(){
     <a class="row" href="${CONTACT.yard}" target="_blank" rel="noopener">${ICON.wheel}<div><small>${t("yard")}</small><b>${t("yardS")} · nautica-guarino.ch</b></div></a>
     <a class="row" href="${base}" target="_blank" rel="noopener">${ICON.link}<div><small>${t("web")}</small><b>tinoleggiobarche.ch</b></div></a>
   </div>
+  <div style="margin-top:16px"><button class="btn btn-line btn-block" data-acct="profile">${t("acTitle")}</button></div>
   ${installUI()}
   <div class="sec-head" style="margin-top:24px"><h2>${t("myReq")}</h2></div>
   <div class="rows">${myReqs.length?myReqs.map((r,i)=>{const b=byId(r.v); if(!b) return ""; return `<div class="rq"><b>${nameOf(b)} · ${r.date.split("-").reverse().join(".")} · ${r.time}</b><span>${t(r.dur)} · CHF ${r.price} · ${r.people} ${t("lPeople").toLowerCase()}</span><span>${t("via")} ${r.via==="auto"?"app":r.via==="mail"?"e-mail":r.via==="wa"?"WhatsApp":t("viaCopy")} · ${new Date(r.ts).toLocaleDateString(lang)}</span><div class="rq-a"><button data-repeat="${i}">${t("repeat")}</button><button data-del="${i}">${t("del")}</button></div></div>`;}).join(""):`<p class="empty">${t("noMyReq")}</p>`}</div>
@@ -1086,7 +1105,7 @@ function renderSheet(){
       ${hasPromo()?`<div class="f w"><label for="fPromo">${t("lPromo")}</label><input type="text" id="fPromo" autocapitalize="characters" autocomplete="off" value="${esc(draft.promo)}">${draft.promo&&!promoFor(draft.promo)?`<span class="ferr">${t("errPromo")}</span>`:""}</div>`:""}
     </form>
     <div class="summary"><div><span>${t("lVehicle")}</span><b>${items().map(i=>nameOf(byId(i.v))+(items().length>1?" · "+t(i.dur):"")).join("<br>")}</b></div><div><span>${t("lDate")}</span><b>${fmtDate(draft.date)} · ${draft.time}</b></div><div><span>${t("lDur")}</span><b>${t(draft.dur)}</b></div><div><span>${t("lPeople")}</span><b>${esc(draft.people)}</b></div><div><span>${t("est")}${anyFuel()?" "+t("mFuel"):""}</span><b>CHF ${finalTotal()}${promoFor(draft.promo)?" (−"+promoFor(draft.promo).pct+"%)":""}</b></div></div>
-    ${depositUI()}
+    ${depositUI()}${rbButton()}
     ${offSeason(draft.date)?`<p class="warn" style="margin-top:10px">${t("offSeason")}</p>`:""}`;
   }
   const st=[t("st1"),t("st2"),t("st3")].map((s,i)=>`<div class="step ${i+1<step?"done":i+1===step?"cur":""}">${i+1}. ${s}</div>`).join("");
@@ -1175,7 +1194,7 @@ document.addEventListener("click",e=>{
 });
 document.addEventListener("change",e=>{
   const id=e.target.id, v=e.target.value;
-  if(id==="langSel"){lang=v; setTimeout(()=>{ if(!$("#tino").hidden) tinoRender(); },0); store.set("tnb-lang-j",v); try{localStorage.setItem("tnb-lang",v);}catch(x){} const open=$("#scrim").classList.contains("open"); if(open&&sheetMode==="book") readStep(); render(true); if(open){sheetMode==="cmp"?openCompare():sheetMode==="wiz"?renderWiz():sheetMode==="sp"?renderSp():sheetMode==="login"?renderLogin():renderSheet();} return;}
+  if(id==="langSel"){lang=v; setTimeout(()=>{ if(!$("#tino").hidden) tinoRender(); },0); store.set("tnb-lang-j",v); try{localStorage.setItem("tnb-lang",v);}catch(x){} const open=$("#scrim").classList.contains("open"); if(open&&sheetMode==="book") readStep(); render(true); if(open){sheetMode==="cmp"?openCompare():sheetMode==="wiz"?renderWiz():sheetMode==="sp"?renderSp():sheetMode==="login"?renderLogin():sheetMode==="rb"?rbRender():renderSheet();} return;}
   if(id==="selPeople"){fPeople=+v;render(true);return;}
   if(id==="selBudget"){fBudget=+v;render(true);return;}
   if(id==="selSort"){fSort=v;render(true);return;}
@@ -1192,7 +1211,7 @@ const T4={it:{lPromo:"Codice promo",errPromo:"Codice non valido o scaduto",unava
 for(const l in T4) Object.assign(T[l],T4[l]);
 ICON.bell='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9a6 6 0 0112 0c0 6 2 7 2 7H4s2-1 2-7z"/><path d="M10 20a2 2 0 004 0"/></svg>';
 const clone=o=>JSON.parse(JSON.stringify(o));
-const AD0={demo:true,status:{},notifs:[],nread:{},ndel:{},prefs:{},banner:{on:false,text:"",tone:"info"},promos:[],contact:{},waOn:true,faqs:[],season:[3,9],fleet:{},fails:0,lockUntil:0,wxDay:"",blocks:[],manual:[],notes:{},itins:[],giftOn:true,reviewUrl:"",dep:{on:false,pct:30,url:""},notifyUrl:"",autoBlock:true,busy:[],lang:"it",sb:{url:"",key:""}};
+const AD0={demo:true,status:{},notifs:[],nread:{},ndel:{},prefs:{},banner:{on:false,text:"",tone:"info"},promos:[],contact:{},waOn:true,faqs:[],season:[3,9],fleet:{},fails:0,lockUntil:0,wxDay:"",blocks:[],manual:[],notes:{},itins:[],giftOn:true,reviewUrl:"",dep:{on:false,pct:30,url:""},notifyUrl:"",autoBlock:true,busy:[],facts:{},lang:"it",sb:{url:"",key:""}};
 let A=Object.assign(clone(AD0),store.get("tnb-adm",{}));
 let PIN=String(store.get("tnb-pin","1234"));
 let RQ=[], RS=[], SP=store.get("tnb-sp",[]);
@@ -1363,7 +1382,7 @@ function renderAdmin(keep){
   const el=$("#admin"),old=document.getElementById("adBody"),sc=keep&&old?old.scrollTop:0,u=unread();
   el.innerHTML=`<div class="ad-top"><div><b>Dashboard</b><small>Ti Noleggio Barche</small></div><div class="ad-tr">${A.demo?`<span class="dmb">DEMO</span>`:""}<button class="ibtn" data-a="tab:ntf" aria-label="Notifiche, ${u} non lette">${ICON.bell}${u?`<i class="bdg">${u}</i>`:""}</button><button class="ad-exit" data-a="exit">Esci</button></div></div>
   <div class="ad-tabs" role="tablist">${TABS.map(x=>`<button role="tab" data-a="tab:${x[0]}" aria-selected="${adTab===x[0]}">${x[1]}</button>`).join("")}</div>
-  <div class="ad-body" id="adBody"><div class="ad-in">${A.demo?`<p class="dstrip">Dati demo attivi: i numeri con l'etichetta "demo" includono dati di esempio, non misurati. Si spengono in Impostazioni.</p>`:""}${({over:adOver,book:adBook,fleet:adFleet,traf:adTraf,mkt:adMkt,ntf:adNtf,cont:adCont,set:adSet})[adTab]()}</div></div>`;
+  <div class="ad-body" id="adBody"><div class="ad-in">${A.demo?`<p class="dstrip">Dati demo attivi: i numeri con l'etichetta "demo" includono dati di esempio, non misurati. Si spengono in Impostazioni.</p>`:""}${({over:adOver,book:adBook,fleet:adFleet,traf:adTraf,mkt:adMkt,ntf:adNtf,cont:adCont,set:adSet,users:adUsers})[adTab]()}</div></div>`;
   document.getElementById("adBody").scrollTop=sc;
   const at=el.querySelector('[aria-selected="true"]'); try{ if(at&&at.scrollIntoView) at.scrollIntoView({inline:"center",block:"nearest"}); }catch(e){}
 }
@@ -1376,7 +1395,7 @@ function openAdmin(){
 /* passcode */
 function drawPin(msg,bad){$("#pinDots").innerHTML=[0,1,2,3].map(i=>`<i class="${i<pinBuf.length?"f":""}"></i>`).join("");const m=$("#pinMsg");m.textContent=msg||"Inserisci il passcode";m.className=bad?"bad":"";}
 function openPin(){pinBuf="";drawPin();$("#pin").classList.add("on");}
-$("#lockBtn").addEventListener("click",()=>{ if(!sbOn()) return openPin(); if(sbTok){openAdmin();sbLoadAll();} else openLogin(); });
+$("#lockBtn").addEventListener("click",()=>{ if(!sbOn()) return openPin(); if(sbTok){openAdmin();sbLoadAll();adminLoad();} else {loginGoal="admin";loginThen=null;loginMode="in";openLogin();} });
 $("#pin").addEventListener("click",e=>{
   if(e.target.id==="pin"){$("#pin").classList.remove("on");return;}
   const b=e.target.closest("[data-p]"); if(!b) return; const k=b.dataset.p;
@@ -1604,9 +1623,9 @@ const notifyUrl=()=>NOTIFY_BAKED||A.notifyUrl||"";
 const autoOn=()=>sbOn()||!!notifyUrl();
 let sbTok=null,sbReady=false,sbT=null,lastSend=Promise.resolve(false);
 try{sbTok=sessionStorage.getItem("tnb-tok")||null;}catch(e){}
-const PUB=["banner","promos","contact","waOn","faqs","season","fleet","blocks","itins","giftOn","reviewUrl","dep","notifyUrl","autoBlock","busy"];
+const PUB=["banner","promos","contact","waOn","faqs","season","fleet","blocks","itins","giftOn","reviewUrl","dep","notifyUrl","autoBlock","busy","facts"];
 function sb(path,o){o=o||{};const c=sbCfg();
-  return fetch(String(c.url).replace(/\/+$/,"")+path,{method:o.method||"GET",headers:Object.assign({apikey:c.key,Authorization:"Bearer "+(sbTok||c.key),"Content-Type":"application/json"},o.headers||{}),body:o.body?JSON.stringify(o.body):undefined})
+  return fetch(String(c.url).replace(/\/+$/,"")+path,{method:o.method||"GET",headers:Object.assign({apikey:c.key,Authorization:"Bearer "+(sbTok||(ses&&ses.tok)||c.key),"Content-Type":"application/json"},o.headers||{}),body:o.body?JSON.stringify(o.body):undefined})
     .then(r=>r.text().then(x=>{if(!r.ok)throw new Error(r.status+" "+x.slice(0,140));return x?JSON.parse(x):null;}));}
 function sbPush(){ if(!sbOn()||!sbTok||!sbReady) return; clearTimeout(sbT); sbT=setTimeout(()=>{A.busy=busyList();const d={};PUB.forEach(k=>d[k]=A[k]);sb("/rest/v1/settings",{method:"POST",headers:{Prefer:"resolution=merge-duplicates,return=minimal"},body:{id:1,data:d}}).catch(()=>{});},900); }
 function sbApply(rows){ if(rows&&rows[0]&&rows[0].data){PUB.forEach(k=>{if(rows[0].data[k]!==undefined)A[k]=rows[0].data[k];});store.set("tnb-adm",A);applyCfg();} }
@@ -1671,7 +1690,7 @@ document.addEventListener("click",e=>{
   if(el.id==="instBtn"){ if(instEvt){try{instEvt.prompt();}catch(x){} instEvt=null;render(true);} return; }
   if(el.id==="sbLogin"){ const c=sbCfg(),mail=$("#lgMail").value.trim(),pw=$("#lgPwd").value; showErr("");
     fetch(String(c.url).replace(/\/+$/,"")+"/auth/v1/token?grant_type=password",{method:"POST",headers:{apikey:c.key,"Content-Type":"application/json"},body:JSON.stringify({email:mail,password:pw})}).then(r=>r.json().then(j=>{if(!r.ok||!j.access_token)throw new Error("login");return j;}))
-      .then(j=>{sbTok=j.access_token;try{sessionStorage.setItem("tnb-tok",sbTok);}catch(x){} $("#scrim").classList.remove("open");openAdmin();sbLoadAll();}).catch(()=>showErr(t("loginErr")));
+      .then(j=>afterLogin(j)).catch(()=>showErr(t("loginErr")));
     return; }
   if(el.id==="sendAuto"){ readStep(); const er=validate(2)||validate(3); if(er){showErr(er);return;} showErr(""); const m=buildMsg(); const pv=$("#preview"); pv.textContent=m.body; pv.classList.add("on");
     el.disabled=true; logReq("auto"); lastSend.then(ok=>{const E=$("#fErr"); if(!E)return; E.textContent=ok?t("sentOk"):t("sentFail"); E.className=ok?"okmsg":"err on"; el.disabled=false;}); return; }
@@ -1778,7 +1797,7 @@ function tinoRender(){
     <button id="tClose" aria-label="${t("tClose")}">${ICON.x}</button></div>
   <div class="t-log" id="tLog" role="log" aria-live="polite"></div>
   <div class="t-q">${q.map((x,i)=>(acts[i]==="docs"&&!sbOn())?"":`<button data-ta="q:${acts[i]}">${x}</button>`).join("")}</div>
-  <div class="t-rec" id="tRecBar"><i></i><b id="tRecT">0:00</b><span id="tRecX"></span><button id="tRecCancel">${t("tCancel")}</button></div>
+  <div class="t-rec" id="tRecBar"><i></i><b id="tRecT">0:00</b><em class="lvl"><i id="tLvl"></i></em><span id="tRecX"></span><button id="tRecCancel">${t("tCancel")}</button></div>
   <div class="t-c"><textarea id="tIn" rows="1" placeholder="${t("tPh")}" aria-label="${t("tPh")}"></textarea>${SRC?`<button id="tMic" aria-label="${t("tHold")}" title="${t("tHold")}">${ICON.mic}</button>`:""}<button id="tSend" aria-label="${t("tSend")}">${ICON.send}</button></div>
   ${SRC?`<p class="t-hint">${t("tHold")}</p>`:""}`;
   tDraw();
@@ -1858,7 +1877,7 @@ function tAnswer(raw){
   if(it==="nolic"&&!o.dur&&!o.date) return R(t("rNolic"),{cards:["open5","open7","pedalo","sup","waterbike"].filter(id=>!byId(id).off)});
   if(it==="wx"){ if(wxState==="ok"&&wx){const c=wx.current;return R(t("rWx").replace("{c}",t("wxC")[wxGroup(c.weather_code)].toLowerCase()).replace("{t}",Math.round(c.temperature_2m)).replace("{w}",Math.round(c.wind_speed_10m)).replace("{g}",Math.round(c.wind_gusts_10m)).replace("{h}",String(c.time||"").slice(11,16)),{acts:[{label:t("tWxSrc"),href:CONTACT.meteo}]});} return R(t("rWxNo"),{acts:[{label:t("tWxSrc"),href:CONTACT.meteo}]}); }
   if(it==="team") return R(t("rTeam"),{acts:[{label:CONTACT.tel2,href:"tel:"+CONTACT.tel2.replace(/ /g,"")},{label:CONTACT.tel1,href:"tel:"+CONTACT.tel1.replace(/ /g,"")},{label:CONTACT.email,href:"mailto:"+CONTACT.email}]});
-  if(it==="docs") return R(t("rDocs"));
+  if(it==="docs") return sbOn()?R(t("rDocsOn"),{acts:[{label:t("acDocs"),act:"acct:docs",pri:true}]}):R(t("rDocs"));
   if(it==="mine") return myReqs.length?R(t("rMine")+"\n"+myReqs.slice(0,5).map(r=>"• "+(byId(r.v)?nameOf(byId(r.v)):r.v)+", "+fmtDate(r.date)+" "+r.time+", "+t(r.dur)).join("\n")):R(t("rMineNone"));
   if(it==="fuel") return R(t("rFuel")); if(it==="age") return R(t("rAge")); if(it==="hours") return R(t("rHours"),{acts:[{label:CONTACT.tel2,href:"tel:"+CONTACT.tel2.replace(/ /g,"")}]}); if(it==="lic") return R(t("rLic")); if(it==="scooter") return R(t("rScooter"),{cards:["scooter"]});
   if(it==="fleet"&&!tCtx.veh){
@@ -1919,6 +1938,269 @@ $("#tino").addEventListener("pointerup",e=>{ if(!e.target.closest("#tMic")) retu
 $("#tino").addEventListener("pointercancel",e=>{ if(e.target.closest("#tMic")) tRecAbort(); });
 $("#tino").addEventListener("contextmenu",e=>{ if(e.target.closest("#tMic")) e.preventDefault(); });
 document.addEventListener("visibilitychange",()=>{ if(document.hidden){ if(tRec) tRecAbort(); } });
+
+
+/* ================= AREA PERSONALE, DOCUMENTI, PRENOTAZIONE CON CONFERMA (attive solo con il database collegato) ================= */
+const TA5={"it": {"acTitle": "Area personale", "acProfile": "Profilo", "acDocs": "I miei documenti", "acBook": "Le mie prenotazioni", "acOut": "Esci dall'account", "acSave": "Salva", "acSaved": "Dati salvati.", "acName": "Nome e cognome", "acNew": "Crea un account", "acHave": "Ho già un account", "acCreate": "Crea account", "acCheck": "Controlla la tua e-mail per confermare l'account, poi accedi.", "acNoAdmin": "Questo account non ha accesso alla dashboard.", "acPwdHint": "Almeno 8 caratteri.", "dT": {"identity": "Documento d'identità", "passport": "Passaporto", "boat_license": "Patente nautica", "other": "Altro documento"}, "dS": {"none": "Non caricato", "uploading": "Caricamento", "processing": "In elaborazione", "unreadable": "Poco leggibile", "to_review": "Da verificare", "approved": "Approvato per l'uso indicato", "rejected": "Respinto", "to_update": "Da aggiornare", "expired": "Scaduto"}, "dUp": "Carica", "dRep": "Sostituisci", "dView": "Vedi", "dDel": "Richiedi eliminazione", "dDelOk": "Richiesta inviata al team: l'eliminazione segue la procedura del noleggio e ti verrà confermata.", "dTips": ["Documento intero nell'inquadratura", "Testo leggibile, luce uniforme", "Niente riflessi e nessun dito sui dati"], "dLimit": "Immagini fino a 15 MB, PDF fino a 20 MB. Le foto vengono salvate in un archivio privato, visibile solo a te e al gestore.", "dPick": "Scegli file o scatta una foto", "dRot": "Ruota", "dExp": "Scadenza (se presente)", "dCat": "Categoria della patente", "dSend": "Carica documento", "dBig": "Il file supera il limite consentito.", "dFmt": "Formato non leggibile da questo dispositivo: usa una foto JPEG o PNG.", "dFail": "Caricamento non riuscito. Riprova.", "dOk": "Documento caricato: è in attesa di verifica.", "dWhy": "Motivo", "dVer": "Versione", "dOn": "caricato il", "rDocsOn": "Puoi caricare patente nautica e documento d'identità nella tua area personale. Serve l'accesso con il tuo account.", "rbBtn": "Prenota con conferma del sistema", "rbNeed": "Per prenotare serve il tuo account.", "rbT": "Prenotazione", "rbHold": "Mezzo tenuto per te fino alle {h}.", "rbNo": "Per questa data e fascia il mezzo non è disponibile.", "rbDoc": "Per questo mezzo serve la patente nautica del conducente.", "rbUse": "Usa documento già presente", "rbUpNew": "Carica nuovo documento", "rbSum": "Controlla il riepilogo", "rbConfirm": "Conferma prenotazione", "rbOk": "Prenotazione confermata", "rbPend": "Prenotazione in attesa: il documento deve essere verificato dal noleggio.", "rbGone": "Il mezzo non è più disponibile: la prenotazione non è stata confermata.", "rbUnknown": "Non ho ricevuto l'esito. Non ripetere la prenotazione: controlla l'esito.", "rbCheck": "Controlla l'esito", "rbCode": "Codice", "rbTbd": "Da definire", "rbErr": {"package_slot_not_configured": "Per questa durata il noleggio non ha ancora configurato la fascia oraria.", "model_not_bookable_in_app": "Questo mezzo non è ancora prenotabile con conferma immediata.", "occupants_exceed_capacity": "Troppe persone per questo mezzo.", "start_in_the_past": "La data e l'ora scelte sono già passate.", "quote_expired": "Il preventivo è scaduto: ricomincia.", "summary_changed_confirm_again": "Il riepilogo è cambiato: controllalo e conferma di nuovo.", "confirmation_expired_or_used": "La conferma è scaduta: controlla di nuovo il riepilogo."}, "rbGen": "Operazione non riuscita. Riprova o contatta il noleggio.", "bSt": {"held": "Opzione", "pending": "In attesa", "confirmed": "Confermata", "cancelled": "Annullata", "expired": "Scaduta", "failed": "Non riuscita", "outcome_unknown": "Esito da verificare"}, "bNone": "Non hai ancora prenotazioni con conferma del sistema.", "pay": "Pagamento", "docs": "Documenti"}, "de": {"acTitle": "Persönlicher Bereich", "acProfile": "Profil", "acDocs": "Meine Dokumente", "acBook": "Meine Buchungen", "acOut": "Abmelden", "acSave": "Speichern", "acSaved": "Daten gespeichert.", "acName": "Vor- und Nachname", "acNew": "Konto erstellen", "acHave": "Ich habe schon ein Konto", "acCreate": "Konto erstellen", "acCheck": "Bestätige dein Konto über die E-Mail und melde dich dann an.", "acNoAdmin": "Dieses Konto hat keinen Zugriff auf das Dashboard.", "acPwdHint": "Mindestens 8 Zeichen.", "dT": {"identity": "Ausweis", "passport": "Reisepass", "boat_license": "Bootsführerschein", "other": "Anderes Dokument"}, "dS": {"none": "Nicht hochgeladen", "uploading": "Wird hochgeladen", "processing": "In Bearbeitung", "unreadable": "Schlecht lesbar", "to_review": "Zu prüfen", "approved": "Für den angegebenen Zweck genehmigt", "rejected": "Abgelehnt", "to_update": "Zu aktualisieren", "expired": "Abgelaufen"}, "dUp": "Hochladen", "dRep": "Ersetzen", "dView": "Ansehen", "dDel": "Löschung anfragen", "dDelOk": "Anfrage ans Team gesendet: die Löschung folgt dem Verfahren der Vermietung und wird dir bestätigt.", "dTips": ["Ganzes Dokument im Bild", "Lesbarer Text, gleichmässiges Licht", "Keine Reflexe, kein Finger auf den Daten"], "dLimit": "Bilder bis 15 MB, PDF bis 20 MB. Die Fotos liegen in einem privaten Archiv, sichtbar nur für dich und den Betreiber.", "dPick": "Datei wählen oder Foto aufnehmen", "dRot": "Drehen", "dExp": "Ablaufdatum (falls vorhanden)", "dCat": "Kategorie des Ausweises", "dSend": "Dokument hochladen", "dBig": "Die Datei ist zu gross.", "dFmt": "Format auf diesem Gerät nicht lesbar: nutze ein JPEG- oder PNG-Foto.", "dFail": "Hochladen fehlgeschlagen. Versuch es nochmals.", "dOk": "Dokument hochgeladen: es wartet auf die Prüfung.", "dWhy": "Grund", "dVer": "Version", "dOn": "hochgeladen am", "rDocsOn": "Bootsführerschein und Ausweis lädst du im persönlichen Bereich hoch. Dafür meldest du dich mit deinem Konto an.", "rbBtn": "Mit Systembestätigung buchen", "rbNeed": "Zum Buchen brauchst du dein Konto.", "rbT": "Buchung", "rbHold": "Fahrzeug für dich reserviert bis {h}.", "rbNo": "Für dieses Datum und diese Zeit ist das Fahrzeug nicht verfügbar.", "rbDoc": "Für dieses Fahrzeug braucht der Fahrer den Bootsführerschein.", "rbUse": "Vorhandenes Dokument verwenden", "rbUpNew": "Neues Dokument hochladen", "rbSum": "Übersicht prüfen", "rbConfirm": "Buchung bestätigen", "rbOk": "Buchung bestätigt", "rbPend": "Buchung ausstehend: das Dokument muss von der Vermietung geprüft werden.", "rbGone": "Das Fahrzeug ist nicht mehr verfügbar: die Buchung wurde nicht bestätigt.", "rbUnknown": "Ich habe kein Ergebnis erhalten. Buche nicht nochmals: prüfe das Ergebnis.", "rbCheck": "Ergebnis prüfen", "rbCode": "Code", "rbTbd": "Noch offen", "rbErr": {"package_slot_not_configured": "Für diese Dauer hat die Vermietung das Zeitfenster noch nicht festgelegt.", "model_not_bookable_in_app": "Dieses Fahrzeug ist noch nicht mit Sofortbestätigung buchbar.", "occupants_exceed_capacity": "Zu viele Personen für dieses Fahrzeug.", "start_in_the_past": "Datum und Zeit liegen in der Vergangenheit.", "quote_expired": "Das Angebot ist abgelaufen: beginne neu.", "summary_changed_confirm_again": "Die Übersicht hat sich geändert: prüfe und bestätige erneut.", "confirmation_expired_or_used": "Die Bestätigung ist abgelaufen: prüfe die Übersicht erneut."}, "rbGen": "Vorgang fehlgeschlagen. Versuch es nochmals oder kontaktiere die Vermietung.", "bSt": {"held": "Option", "pending": "Ausstehend", "confirmed": "Bestätigt", "cancelled": "Storniert", "expired": "Abgelaufen", "failed": "Fehlgeschlagen", "outcome_unknown": "Ergebnis zu prüfen"}, "bNone": "Du hast noch keine Buchungen mit Systembestätigung.", "pay": "Zahlung", "docs": "Dokumente"}, "fr": {"acTitle": "Espace personnel", "acProfile": "Profil", "acDocs": "Mes documents", "acBook": "Mes réservations", "acOut": "Se déconnecter", "acSave": "Enregistrer", "acSaved": "Données enregistrées.", "acName": "Nom et prénom", "acNew": "Créer un compte", "acHave": "J'ai déjà un compte", "acCreate": "Créer le compte", "acCheck": "Confirmez votre compte via l'e-mail reçu, puis connectez-vous.", "acNoAdmin": "Ce compte n'a pas accès au tableau de bord.", "acPwdHint": "Au moins 8 caractères.", "dT": {"identity": "Pièce d'identité", "passport": "Passeport", "boat_license": "Permis bateau", "other": "Autre document"}, "dS": {"none": "Non téléversé", "uploading": "Téléversement", "processing": "En traitement", "unreadable": "Peu lisible", "to_review": "À vérifier", "approved": "Approuvé pour l'usage indiqué", "rejected": "Refusé", "to_update": "À mettre à jour", "expired": "Expiré"}, "dUp": "Téléverser", "dRep": "Remplacer", "dView": "Voir", "dDel": "Demander la suppression", "dDelOk": "Demande envoyée à l'équipe : la suppression suit la procédure du loueur et vous sera confirmée.", "dTips": ["Document entier dans le cadre", "Texte lisible, lumière uniforme", "Pas de reflets, aucun doigt sur les données"], "dLimit": "Images jusqu'à 15 Mo, PDF jusqu'à 20 Mo. Les photos sont dans une archive privée, visible uniquement par vous et le gérant.", "dPick": "Choisir un fichier ou prendre une photo", "dRot": "Pivoter", "dExp": "Expiration (si présente)", "dCat": "Catégorie du permis", "dSend": "Téléverser le document", "dBig": "Le fichier dépasse la limite.", "dFmt": "Format illisible sur cet appareil : utilisez une photo JPEG ou PNG.", "dFail": "Échec du téléversement. Réessayez.", "dOk": "Document téléversé : en attente de vérification.", "dWhy": "Motif", "dVer": "Version", "dOn": "téléversé le", "rDocsOn": "Vous pouvez téléverser permis bateau et pièce d'identité dans votre espace personnel. Il faut vous connecter avec votre compte.", "rbBtn": "Réserver avec confirmation du système", "rbNeed": "Pour réserver, il faut votre compte.", "rbT": "Réservation", "rbHold": "Véhicule retenu pour vous jusqu'à {h}.", "rbNo": "Le véhicule n'est pas disponible à cette date et cet horaire.", "rbDoc": "Pour ce véhicule, le conducteur doit avoir le permis bateau.", "rbUse": "Utiliser le document existant", "rbUpNew": "Téléverser un nouveau document", "rbSum": "Vérifier le récapitulatif", "rbConfirm": "Confirmer la réservation", "rbOk": "Réservation confirmée", "rbPend": "Réservation en attente : le document doit être vérifié par le loueur.", "rbGone": "Le véhicule n'est plus disponible : la réservation n'a pas été confirmée.", "rbUnknown": "Je n'ai pas reçu le résultat. Ne répétez pas la réservation : vérifiez le résultat.", "rbCheck": "Vérifier le résultat", "rbCode": "Code", "rbTbd": "À définir", "rbErr": {"package_slot_not_configured": "Pour cette durée, le loueur n'a pas encore défini le créneau.", "model_not_bookable_in_app": "Ce véhicule n'est pas encore réservable avec confirmation immédiate.", "occupants_exceed_capacity": "Trop de personnes pour ce véhicule.", "start_in_the_past": "La date et l'heure sont déjà passées.", "quote_expired": "Le devis a expiré : recommencez.", "summary_changed_confirm_again": "Le récapitulatif a changé : vérifiez et confirmez à nouveau.", "confirmation_expired_or_used": "La confirmation a expiré : vérifiez à nouveau le récapitulatif."}, "rbGen": "Opération impossible. Réessayez ou contactez le loueur.", "bSt": {"held": "Option", "pending": "En attente", "confirmed": "Confirmée", "cancelled": "Annulée", "expired": "Expirée", "failed": "Échouée", "outcome_unknown": "Résultat à vérifier"}, "bNone": "Vous n'avez pas encore de réservations confirmées par le système.", "pay": "Paiement", "docs": "Documents"}, "en": {"acTitle": "Personal area", "acProfile": "Profile", "acDocs": "My documents", "acBook": "My bookings", "acOut": "Sign out", "acSave": "Save", "acSaved": "Details saved.", "acName": "Full name", "acNew": "Create an account", "acHave": "I already have an account", "acCreate": "Create account", "acCheck": "Confirm your account from the e-mail we sent, then sign in.", "acNoAdmin": "This account has no access to the dashboard.", "acPwdHint": "At least 8 characters.", "dT": {"identity": "Identity document", "passport": "Passport", "boat_license": "Boating licence", "other": "Other document"}, "dS": {"none": "Not uploaded", "uploading": "Uploading", "processing": "Processing", "unreadable": "Hard to read", "to_review": "To be checked", "approved": "Approved for the stated use", "rejected": "Rejected", "to_update": "To be updated", "expired": "Expired"}, "dUp": "Upload", "dRep": "Replace", "dView": "View", "dDel": "Request deletion", "dDelOk": "Request sent to the team: deletion follows the rental's procedure and will be confirmed to you.", "dTips": ["Whole document in the frame", "Readable text, even light", "No glare and no fingers over the details"], "dLimit": "Images up to 15 MB, PDFs up to 20 MB. Photos are kept in a private archive, visible only to you and the manager.", "dPick": "Choose a file or take a photo", "dRot": "Rotate", "dExp": "Expiry (if present)", "dCat": "Licence category", "dSend": "Upload document", "dBig": "The file is over the limit.", "dFmt": "This device can't read that format: use a JPEG or PNG photo.", "dFail": "Upload failed. Try again.", "dOk": "Document uploaded: waiting to be checked.", "dWhy": "Reason", "dVer": "Version", "dOn": "uploaded on", "rDocsOn": "You can upload your boating licence and ID in your personal area. You need to sign in with your account.", "rbBtn": "Book with system confirmation", "rbNeed": "You need your account to book.", "rbT": "Booking", "rbHold": "Vehicle held for you until {h}.", "rbNo": "The vehicle is not available for this date and time.", "rbDoc": "For this vehicle the driver needs a boating licence.", "rbUse": "Use the document already on file", "rbUpNew": "Upload a new document", "rbSum": "Check the summary", "rbConfirm": "Confirm booking", "rbOk": "Booking confirmed", "rbPend": "Booking pending: the document must be checked by the rental.", "rbGone": "The vehicle is no longer available: the booking was not confirmed.", "rbUnknown": "I didn't receive the outcome. Don't book again: check the outcome.", "rbCheck": "Check the outcome", "rbCode": "Code", "rbTbd": "To be determined", "rbErr": {"package_slot_not_configured": "The rental has not set the time slot for this duration yet.", "model_not_bookable_in_app": "This vehicle can't be booked with instant confirmation yet.", "occupants_exceed_capacity": "Too many people for this vehicle.", "start_in_the_past": "The chosen date and time have already passed.", "quote_expired": "The quote has expired: start again.", "summary_changed_confirm_again": "The summary changed: check it and confirm again.", "confirmation_expired_or_used": "The confirmation expired: check the summary again."}, "rbGen": "The operation failed. Try again or contact the rental.", "bSt": {"held": "Hold", "pending": "Pending", "confirmed": "Confirmed", "cancelled": "Cancelled", "expired": "Expired", "failed": "Failed", "outcome_unknown": "Outcome to be checked"}, "bNone": "You have no system-confirmed bookings yet.", "pay": "Payment", "docs": "Documents"}};
+for(const l in TA5) Object.assign(T[l],TA5[l]);
+var ses=null; try{ses=JSON.parse(sessionStorage.getItem("tnb-ses")||"null");}catch(e){}
+if(ses&&ses.admin) sbTok=ses.tok;
+let loginGoal="acct",loginThen=null,loginMode="in",acTab="profile",AC={profile:null,docs:[],bookings:[]},DBM={},upl=null,acMsg="";
+const sbBase=()=>String(sbCfg().url).replace(/\/+$/,"");
+const rpc=(n,a)=>sb("/rest/v1/rpc/"+n,{method:"POST",body:a}).then(x=>Array.isArray(x)?x[0]:x);
+const newId=()=>{try{return crypto.randomUUID();}catch(e){return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g,c=>{const r=Math.random()*16|0;return (c==="x"?r:(r&3|8)).toString(16);});}};
+const saveSes=()=>{try{ses?sessionStorage.setItem("tnb-ses",JSON.stringify(ses)):sessionStorage.removeItem("tnb-ses");}catch(e){}};
+function signOut(){ses=null;sbTok=null;sbReady=false;saveSes();try{sessionStorage.removeItem("tnb-tok");}catch(e){} AC={profile:null,docs:[],bookings:[]};}
+function afterLogin(j){
+  ses={tok:j.access_token,uid:j.user&&j.user.id,email:j.user&&j.user.email,admin:false}; saveSes();
+  return sb("/rest/v1/user_roles?select=role").then(r=>{ses.admin=(r||[]).some(x=>x.role==="admin");},()=>{}).then(()=>{
+    saveSes(); if(ses.admin) sbTok=ses.tok;
+    if(loginGoal==="admin"){ if(!ses.admin){showErr(t("acNoAdmin"));return;} $("#scrim").classList.remove("open");openAdmin();sbLoadAll();adminLoad();return; }
+    $("#scrim").classList.remove("open");document.body.style.overflow=""; const f=loginThen;loginThen=null; if(f) f(); else openAcct(acTab);
+  });
+}
+renderLogin=function(){ const up=loginMode==="up"&&loginGoal!=="admin";
+  $("#sheet").innerHTML=`<div class="grab"></div><div class="sheet-h"><h2 id="sheetTitle">${loginGoal==="admin"?t("loginT"):up?t("acNew"):t("acTitle")}</h2><button class="x" id="closeSheet" aria-label="×">×</button></div>
+  <form class="form" id="loginForm" novalidate>${up?`<div class="f w"><label for="lgName">${t("acName")}</label><input type="text" id="lgName" autocomplete="name"></div>`:""}<div class="f w"><label for="lgMail">${t("email")}</label><input type="email" id="lgMail" autocomplete="username"></div><div class="f w"><label for="lgPwd">${t("pwd")}${up?" · "+t("acPwdHint"):""}</label><input type="password" id="lgPwd" autocomplete="${up?"new-password":"current-password"}"></div></form>
+  ${sbOn()?"":`<p class="warn" style="margin-top:12px">${t("acPrevMsg")}</p>`}<p class="err" id="fErr"></p><div class="send"><button class="btn btn-primary btn-block" id="${sbOn()?(up?"sbSignup":"sbLogin"):"acNoDb"}">${up?t("acCreate"):t("loginB")}</button>${sbOn()?"":`<button class="btn btn-line btn-block" id="acPrevBtn">${t("acPrevBtn")}</button>`}${loginGoal==="admin"?"":`<button class="btn btn-line btn-block" id="lgSwitch">${up?t("acHave"):t("acNew")}</button>`}</div>`; };
+function needLogin(then){ if(ses){then();return;} loginGoal="acct";loginThen=then;loginMode="in";openLogin(); }
+
+/* dati dell'area personale */
+function acctLoad(){ if(!ses) return Promise.resolve();
+  return Promise.all([sb("/rest/v1/profiles?id=eq."+ses.uid+"&select=*"),sb("/rest/v1/documents?owner_id=eq."+ses.uid+"&select=*,document_versions(*)"),sb("/rest/v1/bookings?user_id=eq."+ses.uid+"&select=*,quotes(*)&order=created_at.desc")])
+    .then(r=>{AC.profile=(r[0]||[])[0]||{id:ses.uid,full_name:"",phone:"",lang};AC.docs=(r[1]||[]).map(d=>{d.document_versions=(d.document_versions||[]).sort((a,b)=>b.version-a.version);return d;});AC.bookings=r[2]||[];})
+    .catch(e=>{ if(/^401/.test(e.message)){signOut();} });
+}
+const docOf=type=>AC.docs.find(d=>d.type===type);
+const lastV=type=>{const d=docOf(type);return d&&d.document_versions[0]||null;};
+const chf=c=>"CHF "+(c/100).toFixed(c%100?2:0);
+const zFmt=(iso,o)=>{try{return new Date(iso).toLocaleString(LOC[lang],Object.assign({timeZone:"Europe/Zurich"},o));}catch(e){return iso;}};
+function zurichISO(d,tm){const g=new Date(d+"T"+(tm||"10:00")+":00Z"),f=new Intl.DateTimeFormat("en-GB",{timeZone:"Europe/Zurich",hour12:false,year:"numeric",month:"2-digit",day:"2-digit",hour:"2-digit",minute:"2-digit"});const p={};f.formatToParts(g).forEach(x=>p[x.type]=x.value);const as=Date.UTC(+p.year,+p.month-1,+p.day,+p.hour%24,+p.minute);return new Date(g.getTime()-(as-g.getTime())).toISOString();}
+function acctRender(){
+  const el=$("#acct"),S=ses||(acPrev?{email:t("acPrevTag")}:null); if(!S){el.classList.remove("on");return;}
+  const tabs=[["profile",t("acProfile")],["docs",t("acDocs")],["bookings",t("acBook")]]; let body="";
+  if(acTab==="profile"){const p=AC.profile||{};
+    body=`<div class="ad-card"><h3>${t("acProfile")}</h3><p class="mut">${escH(S.email)}</p><label class="ad-l">${t("acName")}<input id="pfName" autocomplete="name" value="${escH(p.full_name)}"></label><label class="ad-l">${t("lPhone")}<input id="pfPhone" type="tel" autocomplete="tel" value="${escH(p.phone)}"></label><button class="ad-btn" data-ac="pfSave">${t("acSave")}</button><button class="ad-btn ghost" data-ac="out">${t("acOut")}</button></div>`;
+  } else if(acTab==="docs"){
+    body=["identity","boat_license"].map(tp=>{const v=lastV(tp),d=docOf(tp),rev=v&&v.reason;
+      return `<div class="ad-card"><div class="bk-h"><h3>${t("dT")[tp]}</h3><span class="doc-st d-${v?v.status:"none"}">${t("dS")[v?v.status:"none"]}</span></div>
+      ${v?`<p class="mut">${t("dVer")} ${v.version} · ${t("dOn")} ${zFmt(v.created_at,{day:"2-digit",month:"2-digit",year:"numeric"})}${v.expires_on?" · "+t("dExp").split(" (")[0]+" "+fmtDate(v.expires_on):""}</p>`:""}
+      <div class="bk-a"><button class="ok" data-ac="up:${tp}">${v?t("dRep"):t("dUp")}</button>${v?`<button data-ac="view:${v.id}">${t("dView")}</button><button data-ac="del:${d.id}">${t("dDel")}</button>`:""}</div>
+      ${upl&&upl.type===tp?`<ul class="tips">${t("dTips").map(x=>`<li>${x}</li>`).join("")}</ul><p class="ad-note">${t("dLimit")}</p><label class="ad-l">${t("dPick")}<input type="file" id="upFile" accept="image/jpeg,image/png,image/webp,image/heic,image/heif,application/pdf"></label>
+        ${upl.url?`<img class="dprev" id="upPrev" src="${upl.url}" alt="" style="transform:rotate(${upl.rot}deg)"><div class="bk-a"><button data-ac="rot">${t("dRot")}</button></div>`:upl.file?`<p class="mut">${escH(upl.file.name)}</p>`:""}
+        <div class="ad-f2"><label>${t("dExp")}<input type="date" id="upExp"></label>${tp==="boat_license"?`<label>${t("dCat")}<input id="upCat" maxlength="12"></label>`:""}</div>
+        <p class="ad-err" id="upErr"></p><button class="ad-btn" data-ac="upSend" ${upl.file?"":"disabled"}>${t("dSend")}</button>`:""}</div>`;}).join("");
+  } else {
+    body=AC.bookings.length?AC.bookings.map(b=>{const q=b.quotes||{},f=byId(q.model_id);return `<div class="ad-card"><div class="bk-h"><h3>${f?nameOf(f):escH(q.model_id)}</h3><span class="pill s-${b.status==="confirmed"?"confirmed":b.status==="pending"||b.status==="held"?"new":"rejected"}">${t("bSt")[b.status]||b.status}</span></div>
+      <p><b>${zFmt(q.starts_at,{weekday:"short",day:"2-digit",month:"2-digit",year:"numeric",hour:"2-digit",minute:"2-digit"})}</b> · ${t(q.package_code)} · ${chf(q.amount_cents||0)}</p>
+      <p class="mut">${b.code?t("rbCode")+" "+escH(b.code)+" · ":""}${t("pay")}: ${escH(b.payment_status)} · ${t("docs")}: ${escH(b.documents_status)}</p></div>`;}).join(""):`<p class="ad-empty">${t("bNone")}</p>`;
+  }
+  el.innerHTML=`<div class="ad-top"><div><b>${t("acTitle")}</b><small>${escH(S.email)}</small></div><div class="ad-tr"><button class="ad-exit" data-ac="close">${t("tCancel")==="Annulla"?"Chiudi":"×"}</button></div></div>
+  <div class="ad-tabs" role="tablist">${tabs.map(x=>`<button role="tab" data-ac="tab:${x[0]}" aria-selected="${acTab===x[0]}">${x[1]}</button>`).join("")}</div>
+  <div class="ad-body"><div class="ad-in">${acPrev?`<p class="dstrip">${t("acPrevMsg")}</p>`:""}${acMsg?`<p class="dstrip">${escH(acMsg)}</p>`:""}${body}</div></div>`;
+}
+function openAcct(tab){ if(!sbOn()){loginGoal="acct";loginMode="in";openLogin();return;} needLogin(()=>{acTab=tab||"profile";acMsg="";upl=null;$("#acct").classList.add("on");document.body.style.overflow="hidden";acctRender();acctLoad().then(acctRender);}); }
+function closeAcct(){acPrev=false;$("#acct").classList.remove("on");document.body.style.overflow="";if(upl&&upl.url){try{URL.revokeObjectURL(upl.url);}catch(e){}}upl=null;}
+function toJpeg(file,rot){ return createImageBitmap(file).then(bm=>{const sc=Math.min(1,2400/Math.max(bm.width,bm.height)),w=Math.round(bm.width*sc),h=Math.round(bm.height*sc),sw=rot%180!==0,c=document.createElement("canvas");c.width=sw?h:w;c.height=sw?w:h;const x=c.getContext("2d");x.translate(c.width/2,c.height/2);x.rotate(rot*Math.PI/180);x.drawImage(bm,-w/2,-h/2,w,h);return new Promise((res,rej)=>c.toBlob(b=>b?res(b):rej(new Error("fmt")),"image/jpeg",.9));}); }
+function docUpload(type,file,rot,meta){
+  const pdf=file.type==="application/pdf"; if(file.size>(pdf?20:15)*1048576) return Promise.reject(new Error("big"));
+  return (pdf?Promise.resolve(file):toJpeg(file,rot).catch(()=>{throw new Error("fmt");})).then(blob=>{
+    const d0=docOf(type); return (d0?Promise.resolve(d0):sb("/rest/v1/documents",{method:"POST",headers:{Prefer:"return=representation"},body:{owner_id:ses.uid,subject_user_id:ses.uid,type}}).then(r=>{const d=r[0];d.document_versions=[];AC.docs.push(d);return d;})).then(doc=>{
+      const n=1+Math.max(0,...doc.document_versions.map(v=>v.version)),path=ses.uid+"/"+doc.id+"/"+n+(pdf?".pdf":".jpg"),c=sbCfg();
+      return fetch(sbBase()+"/storage/v1/object/documents/"+path,{method:"POST",headers:{apikey:c.key,Authorization:"Bearer "+ses.tok,"Content-Type":pdf?"application/pdf":"image/jpeg","x-upsert":"false"},body:blob}).then(r=>{if(!r.ok)throw new Error("upload");})
+        .then(()=>sb("/rest/v1/document_versions",{method:"POST",headers:{Prefer:"return=representation"},body:{document_id:doc.id,version:n,storage_path:path,status:"to_review",fields:meta.fields||{},fields_source:"user",fields_confirmed:true,expires_on:meta.exp||null}})).then(r=>{doc.document_versions.unshift(r[0]);return r[0];});
+    });
+  });
+}
+function docView(path){ return sb("/storage/v1/object/sign/documents/"+path,{method:"POST",body:{expiresIn:120}}).then(r=>{const u=r&&(r.signedURL||r.signedUrl); if(!u) throw new Error("sign"); const full=sbBase()+"/storage/v1"+u; if(/\.pdf(\?|$)/.test(path)){showLink(full);try{window.open(full,"_blank","noopener");}catch(e){}} else {$("#lbImg").src=full;$("#lbC").textContent="";$("#lb").classList.add("on");} }); }
+$("#acct").addEventListener("click",e=>{
+  const el=e.target.closest("[data-ac]"); if(!el) return; const p=el.dataset.ac.split(":"),a=p[0];
+  if(a==="close"){closeAcct();return;}
+  if(acPrev&&a!=="tab"&&a!=="up"&&a!=="rot"){acMsg="";acctRender();try{$("#acct .ad-body").scrollTop=0;}catch(x){}return;}
+  if(a==="tab"){acTab=p[1];acMsg="";upl=null;acctRender();return;}
+  if(a==="out"){signOut();closeAcct();render(true);return;}
+  if(a==="pfSave"){const body={id:ses.uid,full_name:$("#pfName").value.trim(),phone:$("#pfPhone").value.trim(),lang};sb("/rest/v1/profiles",{method:"POST",headers:{Prefer:"resolution=merge-duplicates,return=minimal"},body}).then(()=>{AC.profile=body;acMsg=t("acSaved");acctRender();},()=>{acMsg=t("rbGen");acctRender();});return;}
+  if(a==="up"){upl={type:p[1],file:null,url:"",rot:0};acMsg="";acctRender();return;}
+  if(a==="rot"){upl.rot=(upl.rot+90)%360;const i=$("#upPrev");if(i)i.style.transform="rotate("+upl.rot+"deg)";return;}
+  if(a==="upSend"){ if(!upl||!upl.file) return; const E=$("#upErr"),cat=$("#upCat");el.disabled=true;
+    docUpload(upl.type,upl.file,upl.rot,{exp:$("#upExp").value,fields:cat&&cat.value.trim()?{category:cat.value.trim()}:{}}).then(()=>{if(upl.url){try{URL.revokeObjectURL(upl.url);}catch(x){}}upl=null;acMsg=t("dOk");acctRender();if(rbBack){const f=rbBack;rbBack=null;closeAcct();f();}},x=>{el.disabled=false;E.textContent=x.message==="big"?t("dBig"):x.message==="fmt"?t("dFmt"):t("dFail");});return;}
+  if(a==="view"){const v=AC.docs.reduce((o,d)=>o||d.document_versions.find(x=>x.id===p[1]),null); if(v) docView(v.storage_path).catch(()=>{acMsg=t("rbGen");acctRender();});return;}
+  if(a==="del"){sb("/rest/v1/requests",{method:"POST",headers:{Prefer:"return=minimal"},body:{ts:Date.now(),kind:"doc_deletion",status:"new",data:{document_id:p[1],user_id:ses.uid,email:ses.email}}}).then(()=>{acMsg=t("dDelOk");acctRender();},()=>{acMsg=t("rbGen");acctRender();});return;}
+});
+$("#acct").addEventListener("change",e=>{ if(e.target.id!=="upFile"||!upl) return; const f=e.target.files&&e.target.files[0]; if(!f) return; if(upl.url){try{URL.revokeObjectURL(upl.url);}catch(x){}} upl.file=f;upl.rot=0;upl.url="";
+  if(f.size>(f.type==="application/pdf"?20:15)*1048576){upl.file=null;acctRender();$("#upErr").textContent=t("dBig");return;}
+  if(f.type.indexOf("image/")===0){try{upl.url=URL.createObjectURL(f);}catch(x){}} acctRender(); });
+
+/* prenotazione con conferma del sistema */
+let RB=null,rbBack=null,rbTick=null;
+function sbLoadCatalog(){ if(!sbOn()) return Promise.resolve(); return Promise.all([sb("/rest/v1/fleet_models?select=*"),sb("/rest/v1/price_packages?select=*")]).then(r=>{DBM={};(r[0]||[]).forEach(m=>{DBM[m.id]=Object.assign({packs:{}},m);});(r[1]||[]).forEach(k=>{if(DBM[k.model_id])DBM[k.model_id].packs[k.code]=k;});}).catch(()=>{}); }
+const rbCan=()=>{const m=DBM[draft.vehicle];return sbOn()&&m&&m.bookable&&m.packs[draft.dur]&&m.packs[draft.dur].minutes!=null&&!(draft.more||[]).length;};
+const rbButton=()=>rbCan()?`<button class="btn btn-primary btn-block" id="rbStart" style="margin-top:10px">${t("rbBtn")}</button>`:"";
+const rbErrText=e=>{const m=String(e&&e.message||"");for(const k in t("rbErr")) if(m.indexOf(k)>=0) return t("rbErr")[k]; return t("rbGen");};
+function rbRender(){
+  const R=RB,q=R.quote,f=q&&byId(q.model_id); let h="";
+  if(R.busy&&!R.hold&&!R.err) h=`<p class="lead">…</p>`;
+  else if(R.err&&!R.hold) h=`<p class="warn bad" style="margin-top:12px">${escH(R.err)}</p>`;
+  else if(R.result){const r=R.result;
+    h=r==="unknown"?`<p class="warn" style="margin-top:12px">${t("rbUnknown")}</p><button class="btn btn-primary btn-block" id="rbConfirm" style="margin-top:10px">${t("rbCheck")}</button>`
+     :r.ok&&r.status==="confirmed"?`<p class="rb-big">${t("rbOk")}</p><p class="rb-code">${escH(r.code)}</p>`
+     :r.ok?`<p class="warn" style="margin-top:12px">${t("rbPend")}</p><p class="rb-code">${escH(r.code)}</p>`
+     :`<p class="warn bad" style="margin-top:12px">${t("rbGone")}</p>`;
+  } else {
+    const s=R.conf&&R.conf.summary, lic=q.conditions&&q.conditions.license_required, lv=lastV("boat_license");
+    h=`<p class="warn" style="margin-top:12px">${t("rbHold").replace("{h}",zFmt(R.hold.hold_expires_at,{hour:"2-digit",minute:"2-digit"}))}</p>
+    ${lic&&!s?`<div class="ad-card" style="margin-top:12px"><h3>${t("dT").boat_license}</h3><p>${t("rbDoc")}</p>${lv?`<p class="mut">${t("dVer")} ${lv.version} · ${t("dS")[lv.status]}</p>`:""}<div class="bk-a">${lv&&lv.status!=="rejected"&&lv.status!=="expired"?`<button class="${R.docV===lv.id?"ok":""}" id="rbUseDoc">${R.docV===lv.id?"✓ ":""}${t("rbUse")}</button>`:""}<button id="rbUpDoc">${t("rbUpNew")}</button></div></div>`:""}
+    ${s?`<div class="summary"><div><span>${t("lVehicle")}</span><b>${f?nameOf(f):escH(s.model)}</b></div><div><span>${t("lDate")}</span><b>${zFmt(s.starts_at,{weekday:"long",day:"numeric",month:"long",year:"numeric"})}</b></div><div><span>${t("lTime")}</span><b>${zFmt(s.starts_at,{hour:"2-digit",minute:"2-digit"})} – ${zFmt(s.ends_at,{hour:"2-digit",minute:"2-digit"})}</b></div><div><span>${t("lDur")}</span><b>${t(s.package)}</b></div><div><span>${t("lPeople")}</span><b>${escH(s.occupants)}</b></div><div><span>${t("totalL")}</span><b>${chf(s.amount_cents)}</b></div>${(s.to_be_determined||[]).map(x=>`<div><span>${t("rbTbd")}</span><b>${escH(x)}</b></div>`).join("")}${s.conditions&&s.conditions.requirement_note?`<div><span>${t("requirements")}</span><b>${escH(s.conditions.requirement_note)}</b></div>`:""}</div>
+      ${R.err?`<p class="warn bad" style="margin-top:10px">${escH(R.err)}</p>`:""}<button class="btn btn-primary btn-block" id="rbConfirm" style="margin-top:12px" ${R.busy?"disabled":""}>${t("rbConfirm")}</button>`
+      :`<button class="btn btn-primary btn-block" id="rbSummary" style="margin-top:12px" ${R.busy?"disabled":""}>${t("rbSum")}</button>`}`;
+  }
+  $("#sheet").innerHTML=`<div class="grab"></div><div class="sheet-h"><h2 id="sheetTitle">${t("rbT")}${f?" · "+nameOf(f):""}</h2><button class="x" id="closeSheet" aria-label="×">×</button></div>${h}`;
+}
+function rbBegin(){
+  sheetMode="rb"; RB={busy:true}; $("#scrim").classList.add("open"); document.body.style.overflow="hidden"; rbRender();
+  rpc("calculate_quote",{p_model:draft.vehicle,p_package:draft.dur,p_starts:zurichISO(draft.date,draft.time),p_occupants:+draft.people})
+   .then(q=>{RB.quote=q;RB.opHold=newId();return rpc("create_hold",{p_quote:q.id,p_operation:RB.opHold});})
+   .then(h=>{RB.busy=false; if(!h||!h.ok){RB.err=t("rbNo");rbRender();return;} RB.hold=h; return acctLoad().then(rbRender);})
+   .catch(e=>{RB.busy=false;RB.err=rbErrText(e);rbRender();});
+}
+document.addEventListener("click",e=>{
+  const g=s=>e.target.closest&&e.target.closest(s); let el;
+  if((el=g("[data-acct]"))){openAcct(el.dataset.acct);return;}
+  if(g("#lgSwitch")){loginMode=loginMode==="up"?"in":"up";renderLogin();return;}
+  if(g("#sbSignup")){const c=sbCfg(),mail=$("#lgMail").value.trim(),pw=$("#lgPwd").value,nm=$("#lgName").value.trim(); showErr(""); if(pw.length<8){showErr(t("acPwdHint"));return;}
+    fetch(sbBase()+"/auth/v1/signup",{method:"POST",headers:{apikey:c.key,"Content-Type":"application/json"},body:JSON.stringify({email:mail,password:pw,data:{full_name:nm}})}).then(r=>r.json().then(j=>{if(!r.ok)throw new Error("signup");return j;}))
+      .then(j=>{ if(j.access_token) return afterLogin(j).then(()=>{ if(nm) sb("/rest/v1/profiles",{method:"POST",headers:{Prefer:"resolution=merge-duplicates,return=minimal"},body:{id:ses.uid,full_name:nm,lang}}).catch(()=>{}); }); loginMode="in";renderLogin();showErr(t("acCheck")); }).catch(()=>showErr(t("loginErr")));return;}
+  if(g("#rbStart")){readStep();const er=validate(2); if(er){showErr(er);return;} needLogin(rbBegin);return;}
+  if(!RB||sheetMode!=="rb") return;
+  if(g("#rbUseDoc")){const v=lastV("boat_license"); if(!v) return; sb("/rest/v1/booking_documents",{method:"POST",headers:{Prefer:"return=minimal,resolution=ignore-duplicates"},body:{booking_id:RB.hold.booking_id,document_version_id:v.id}}).then(()=>{RB.docV=v.id;rbRender();},()=>{RB.err=t("rbGen");rbRender();});return;}
+  if(g("#rbUpDoc")){rbBack=()=>{sheetMode="rb";$("#scrim").classList.add("open");document.body.style.overflow="hidden";rbRender();};$("#scrim").classList.remove("open");acTab="docs";upl={type:"boat_license",file:null,url:"",rot:0};$("#acct").classList.add("on");acctRender();return;}
+  if(g("#rbSummary")){RB.busy=true;RB.err="";rbRender();rpc("prepare_confirmation",{p_booking:RB.hold.booking_id}).then(c=>{RB.busy=false;RB.conf=c;RB.opConf=newId();rbRender();},x=>{RB.busy=false;RB.err=rbErrText(x);rbRender();});return;}
+  if(g("#rbConfirm")){ if(RB.busy) return; RB.busy=true;RB.err="";RB.result=null;rbRender();
+    rpc("confirm_booking",{p_booking:RB.hold.booking_id,p_confirmation:RB.conf.id,p_operation:RB.opConf}).then(r=>{RB.busy=false;RB.result=r;rbRender();ev("booked_system");},x=>{RB.busy=false; if(/^\d{3} /.test(x.message)){RB.err=rbErrText(x);} else RB.result="unknown"; rbRender();});return;}
+});
+$("#tino").addEventListener("click",e=>{const el=e.target.closest('[data-ta^="acct:"]'); if(el){const tb=el.dataset.ta.slice(5);tinoClose();openAcct(tb);} });
+
+/* dashboard: utenti, documenti da verificare, inventario reale */
+let AU={versions:[],profiles:[],bookings:[],units:[],loaded:false},auF="to_review",auOpen="";
+function adminLoad(){ if(!sbOn()||!sbTok) return Promise.resolve();
+  return Promise.all([sb("/rest/v1/document_versions?select=*,documents(type,owner_id,subject_user_id)&order=created_at.desc"),sb("/rest/v1/profiles?select=*"),sb("/rest/v1/bookings?select=*,quotes(*)&order=created_at.desc"),sb("/rest/v1/physical_units?select=*&order=label"),sbLoadCatalog()])
+    .then(r=>{AU={versions:r[0]||[],profiles:r[1]||[],bookings:r[2]||[],units:r[3]||[],loaded:true}; if($("#admin").classList.contains("on")) renderAdmin(true);}).catch(()=>{});
+}
+const auName=id=>{const p=AU.profiles.find(x=>x.id===id);return p&&p.full_name?p.full_name:"Utente "+String(id||"").slice(0,8);};
+function adUsers(){
+  if(!AU.loaded) return `<p class="ad-empty">Carico utenti e documenti…</p>`;
+  const DS=T.it.dS,DT=T.it.dT,L=AU.versions.filter(v=>auF==="all"||v.status===auF),cnt=k=>AU.versions.filter(v=>v.status===k).length;
+  const users=AU.profiles.map(p=>({p,docs:AU.versions.filter(v=>v.documents&&v.documents.owner_id===p.id),bk:AU.bookings.filter(b=>b.user_id===p.id)}));
+  return `${card("Documenti da verificare",`<div class="ad-chips in">${[["to_review","Da verificare"],["to_update","Da aggiornare"],["rejected","Respinti"],["unreadable","Illeggibili"],["approved","Approvati"],["all","Tutti"]].map(x=>`<button data-a="auF:${x[0]}" aria-pressed="${auF===x[0]}">${x[1]}${x[0]==="all"?"":" ("+cnt(x[0])+")"}</button>`).join("")}</div>
+    ${L.length?L.map(v=>`<div class="rq" style="padding:12px 0"><div class="bk-h"><b>${DT[v.documents.type]||v.documents.type} · ${escH(auName(v.documents.owner_id))}</b><span class="doc-st d-${v.status}">${DS[v.status]||v.status}</span></div>
+      <span>Versione ${v.version} · caricato il ${new Date(v.created_at).toLocaleDateString("it")}${v.expires_on?" · scadenza "+fmtDate(v.expires_on):""}${v.fields&&v.fields.category?" · categoria "+escH(v.fields.category):""}${v.fields_source==="user"?" · dati inseriti dal cliente":""}</span>
+      <div class="bk-a"><button data-a="auView:${v.id}">Anteprima</button>${v.status!=="approved"?`<button class="ok" data-a="auRev:${v.id}:approved">Approva</button>`:""}<button data-a="auRev:${v.id}:to_update">Chiedi nuova immagine</button><button data-a="auRev:${v.id}:rejected">Respingi</button></div>
+      <label class="ad-l">Motivo (obbligatorio per respingere o chiedere una nuova immagine)<input id="auWhy-${v.id}"></label></div>`).join(""):`<p class="ad-empty">Nessun documento in questo stato.</p>`}<p class="ad-err" id="auErr"></p>
+    <p class="ad-note">L'approvazione vale per l'uso indicato e per questa versione del file: non certifica l'autenticità del documento.</p>`)}
+  ${card("Utenti ("+users.length+")",`<input id="auQ" type="search" placeholder="Cerca per nome o telefono" aria-label="Cerca utenti">${users.map(u=>`<div class="pl-r au" data-s="${escH(((u.p.full_name||"")+" "+(u.p.phone||"")).toLowerCase())}"><div><b>${escH(u.p.full_name||"Senza nome")}</b><span>${escH(u.p.phone||"")} · ${u.docs.length} versioni di documenti · ${u.bk.length} prenotazioni</span>${auOpen===u.p.id?`<span>${u.docs.map(v=>(DT[v.documents.type]||"")+" v"+v.version+": "+(DS[v.status]||v.status)).join(" · ")||"Nessun documento"}</span><span>${u.bk.map(b=>(b.code||"senza codice")+" "+b.status).join(" · ")||"Nessuna prenotazione"}</span>`:""}</div><button data-a="auOpen:${u.p.id}" aria-label="Dettagli">${auOpen===u.p.id?"–":"+"}</button></div>`).join("")||`<p class="ad-empty">Nessun utente registrato.</p>`}`)}
+  ${card("Prenotazioni con conferma del sistema",AU.bookings.length?AU.bookings.map(b=>{const q=b.quotes||{};return `<div class="pl-r"><div><b>${escH(b.code||"Opzione")} · ${escH(q.model_id||"")} · ${escH(auName(b.user_id))}</b><span>${q.starts_at?new Date(q.starts_at).toLocaleString("it",{timeZone:"Europe/Zurich"}):""} · prenotazione: ${escH(b.status)} · pagamento: ${escH(b.payment_status)} · documenti: ${escH(b.documents_status)}</span></div></div>`;}).join(""):`<p class="ad-empty">Nessuna prenotazione.</p>`)}
+  ${card("Inventario reale e fasce orarie",Object.values(DBM).map(m=>`<div class="rq" style="padding:12px 0"><div class="bk-h"><b>${escH(m.name)}</b><label class="sw"><input type="checkbox" data-c="auBook:${m.id}" ${m.bookable?"checked":""}><i></i><span>Prenotabile nell'app</span></label></div>
+      <span>Esemplari: ${AU.units.filter(u=>u.model_id===m.id&&u.active).map(u=>escH(u.label)).join(", ")||"nessuno configurato"}</span>
+      <div class="ad-f2" style="margin-top:6px"><label>Nuovo esemplare<input id="auU-${m.id}" placeholder="Es. ${escH(m.name)} n.1"></label><label>&nbsp;<button class="ad-btn" style="margin:0" data-a="auUnit:${m.id}">Aggiungi</button></label></div>
+      <div class="ad-f3" style="margin-top:6px">${Object.values(m.packs).map(k=>`<label>${escH(k.label)} (minuti)<input type="number" min="0" data-c="auMin:${k.id}" value="${k.minutes==null?"":k.minutes}" placeholder="da definire"></label>`).join("")}</div></div>`).join("")+`<p class="ad-note">Un modello è vendibile nell'app solo se è prenotabile, ha almeno un esemplare e la durata scelta ha i minuti definiti. I conteggi del sito non sono inventario.</p>`)}`;
+}
+const _ra2=renderAdmin; renderAdmin=function(k){ const has=TABS.some(x=>x[0]==="users"),want=sbOn()&&!!sbTok; if(want&&!has)TABS.splice(2,0,["users","Utenti e documenti"]); if(!want&&has){TABS.splice(TABS.findIndex(x=>x[0]==="users"),1); if(adTab==="users")adTab="over";} _ra2(k); };
+$("#admin").addEventListener("click",e=>{
+  const el=e.target.closest("[data-a]"); if(!el) return; const p=el.dataset.a.split(":"),a=p[0];
+  if(a==="auF"){auF=p[1];renderAdmin(true);return;}
+  if(a==="auOpen"){auOpen=auOpen===p[1]?"":p[1];renderAdmin(true);return;}
+  if(a==="auView"){const v=AU.versions.find(x=>x.id===p[1]); if(v){docView(v.storage_path).catch(()=>{$("#auErr").textContent="Anteprima non disponibile.";});sb("/rest/v1/audit_events",{method:"POST",headers:{Prefer:"return=minimal"},body:{actor_id:ses&&ses.uid,action:"view_document",target:v.id}}).catch(()=>{});}return;}
+  if(a==="auRev"){const why=(document.getElementById("auWhy-"+p[1])||{}).value||""; if(p[2]!=="approved"&&!why.trim()){$("#auErr").textContent="Indica il motivo.";return;}
+    rpc("admin_review_document",{p_version:p[1],p_decision:p[2],p_reason:why.trim()||null,p_context:null}).then(()=>adminLoad(),x=>{$("#auErr").textContent="Revisione non riuscita ("+x.message.slice(0,60)+").";});return;}
+  if(a==="auUnit"){const i=document.getElementById("auU-"+p[1]),lab=i.value.trim(); if(!lab) return; sb("/rest/v1/physical_units",{method:"POST",headers:{Prefer:"return=minimal"},body:{model_id:p[1],label:lab}}).then(()=>adminLoad(),()=>{});return;}
+});
+$("#admin").addEventListener("change",e=>{ const c=e.target.dataset.c||""; 
+  if(c.indexOf("auBook:")===0){sb("/rest/v1/fleet_models?id=eq."+encodeURIComponent(c.slice(7)),{method:"PATCH",headers:{Prefer:"return=minimal"},body:{bookable:e.target.checked}}).then(()=>adminLoad(),()=>{});return;}
+  if(c.indexOf("auMin:")===0){const v=e.target.value;sb("/rest/v1/price_packages?id=eq."+encodeURIComponent(c.slice(6)),{method:"PATCH",headers:{Prefer:"return=minimal"},body:{minutes:v===""?null:Math.max(0,Math.round(+v))}}).then(()=>adminLoad(),()=>{});return;}
+});
+$("#admin").addEventListener("input",e=>{ if(e.target.id!=="auQ") return; const q=e.target.value.trim().toLowerCase(); document.querySelectorAll("#admin .au").forEach(c=>{c.style.display=!q||c.dataset.s.indexOf(q)>=0?"":"none";}); });
+if(sbOn()) sbLoadCatalog().then(()=>{ if($("#scrim").classList.contains("open")&&sheetMode==="book") renderSheet(); });
+
+
+/* ================= anteprima account, dati confermati dal gestore, TINO per il gestore, registrazione audio ================= */
+const TX6={"it": {"acPrevTag": "Anteprima", "acPrevMsg": "Anteprima: accesso, profilo e documenti si attivano quando il database è collegato. Nessun dato viene salvato o inviato.", "acPrevBtn": "Vedi l'anteprima dell'area personale", "fConf": "Confermato dal noleggio:", "fAge18": "si può guidare dai 18 anni compiuti.", "fAge19": "bisogna aver superato i 18 anni.", "fFuelIn": "per Open 5 e Open 7 il carburante è incluso.", "fFuelEx": "per Open 5 e Open 7 il carburante è a parte.", "fHours": "Orari", "fDep": "Cauzione", "fCan": "Cancellazioni"}, "de": {"acPrevTag": "Vorschau", "acPrevMsg": "Vorschau: Anmeldung, Profil und Dokumente werden aktiv, sobald die Datenbank verbunden ist. Es werden keine Daten gespeichert oder gesendet.", "acPrevBtn": "Vorschau des persönlichen Bereichs ansehen", "fConf": "Von der Vermietung bestätigt:", "fAge18": "Fahren ab vollendetem 18. Lebensjahr.", "fAge19": "man muss älter als 18 sein.", "fFuelIn": "bei Open 5 und Open 7 ist der Treibstoff inbegriffen.", "fFuelEx": "bei Open 5 und Open 7 wird der Treibstoff separat berechnet.", "fHours": "Öffnungszeiten", "fDep": "Kaution", "fCan": "Stornierung"}, "fr": {"acPrevTag": "Aperçu", "acPrevMsg": "Aperçu : connexion, profil et documents s'activent quand la base de données est reliée. Aucune donnée n'est enregistrée ni envoyée.", "acPrevBtn": "Voir l'aperçu de l'espace personnel", "fConf": "Confirmé par le loueur :", "fAge18": "conduite possible dès 18 ans révolus.", "fAge19": "il faut avoir plus de 18 ans.", "fFuelIn": "pour Open 5 et Open 7 le carburant est compris.", "fFuelEx": "pour Open 5 et Open 7 le carburant est en sus.", "fHours": "Horaires", "fDep": "Caution", "fCan": "Annulations"}, "en": {"acPrevTag": "Preview", "acPrevMsg": "Preview: sign-in, profile and documents become active once the database is connected. No data is saved or sent.", "acPrevBtn": "See a preview of the personal area", "fConf": "Confirmed by the rental:", "fAge18": "you can drive from your 18th birthday.", "fAge19": "you must be over 18.", "fFuelIn": "for Open 5 and Open 7 fuel is included.", "fFuelEx": "for Open 5 and Open 7 fuel is charged separately.", "fHours": "Opening hours", "fDep": "Deposit", "fCan": "Cancellations"}};
+for(const l in TX6) Object.assign(T[l],TX6[l]);
+var acPrev=false;
+$("#userBtn").addEventListener("click",()=>openAcct("profile"));
+document.addEventListener("click",e=>{ const g=s=>e.target.closest&&e.target.closest(s);
+  if(g("#acNoDb")){showErr(t("acPrevMsg"));return;}
+  if(g("#acPrevBtn")){$("#scrim").classList.remove("open");acPrev=true;acTab="profile";acMsg="";upl=null;AC={profile:{full_name:"",phone:""},docs:[],bookings:[]};$("#acct").classList.add("on");document.body.style.overflow="hidden";acctRender();return;}
+});
+
+/* dati che solo il noleggio può confermare: finché sono vuoti TINO dice che vanno chiesti */
+if(!A.facts) A.facts={};
+const _adCont2=adCont; adCont=function(){const f=A.facts,o=(v,l,c)=>`<option value="${v}" ${String(c||"")===v?"selected":""}>${l}</option>`;
+  return _adCont2()+card("Dati da verificare con il noleggio",`<p class="ad-note" style="margin-top:0">Punti che il sito non chiarisce. Compila solo ciò che il noleggio ha confermato: TINO userà queste risposte. Vuoto = «chiedi al noleggio».</p>
+  <div class="ad-f2"><label>Età minima del conducente<select data-c="fact:age">${o("","Non confermata",f.age)}${o("18","Dai 18 anni compiuti",f.age)}${o("19","Oltre i 18 anni",f.age)}</select></label><label>Carburante Open 5 e Open 7<select data-c="fact:fuel">${o("","Non confermato",f.fuel)}${o("in","Incluso",f.fuel)}${o("ex","A parte",f.fuel)}</select></label></div>
+  <label class="ad-l">Orari di apertura<input data-c="fact:hours" value="${escH(f.hours)}" placeholder="Es. tutti i giorni 9:00-19:00"></label><label class="ad-l">Cauzione<input data-c="fact:dep" value="${escH(f.dep)}"></label><label class="ad-l">Cancellazioni e maltempo<input data-c="fact:can" value="${escH(f.can)}"></label>
+  ${f.at?`<p class="ad-note">Ultimo aggiornamento: ${new Date(f.at).toLocaleString("it")}</p>`:""}`); };
+$("#admin").addEventListener("change",e=>{const c=e.target.dataset.c||""; if(c.indexOf("fact:")!==0) return; A.facts[c.slice(5)]=String(e.target.value).trim(); A.facts.at=Date.now(); saveA(); });
+const _ta=tAnswer; tAnswer=function(raw){ const m=_ta(raw),f=A.facts||{};
+  if(m.text===t("rAge")&&f.age) m.text+=" "+t("fConf")+" "+t(f.age==="18"?"fAge18":"fAge19");
+  if(m.text===t("rFuel")&&f.fuel) m.text=m.text.split(". ")[0]+". "+t("fConf")+" "+t(f.fuel==="in"?"fFuelIn":"fFuelEx");
+  if(m.text===t("rHours")){const L=[["hours","fHours"],["dep","fDep"],["can","fCan"]].filter(x=>f[x[0]]).map(x=>t(x[1])+": "+f[x[0]]); if(L.length) m.text=t("fConf")+"\n"+L.join("\n")+(L.length<3?"\n"+t("rHours"):"");}
+  return m; };
+
+/* TINO nell'area del gestore: strumenti separati da quelli pubblici, solo sui dati della dashboard */
+let tinoAdmin=false; const T_ADMQ=["Richieste nuove","Oggi","Domani","Documenti da verificare","Statistiche"];
+function tAdminAnswer(raw){
+  const x=tN(raw),o=tParse(raw),R=(text,acts)=>({who:"t",text,acts}),B=bookings(),nm=b=>(byId(b.v)?nameOf(byId(b.v)):b.v)+", "+fmtDate(b.date)+" "+b.time+", "+(b.name||"")+(b.demo?" (demo)":"");
+  if(/document/.test(x)){ if(!(sbOn()&&AU.loaded)) return R("La verifica dei documenti si attiva con il database collegato."); const n=AU.versions.filter(v=>v.status==="to_review").length; return R(n?"Ci sono "+n+" documenti da verificare.":"Nessun documento in attesa di verifica.",[{label:"Apri utenti e documenti",act:"adm:users",pri:true}]); }
+  if(/statistic|visite|traffico|conversion/.test(x)){const v=tot("s",7),r=tot("sent",7);return R("Negli ultimi 7 giorni: "+fmtN(v)+" visite e "+fmtN(r)+" richieste"+(A.demo?", dati demo inclusi":"")+".",[{label:"Apri traffico e flusso",act:"adm:traf",pri:true}]);}
+  if(/cerca|cliente|chi e\b|trova/.test(x)){const q=x.replace(/.*(cerca|cliente|trova|chi e)\s*/,"").trim(),L=q?B.filter(b=>tN(b.name||"").indexOf(q)>=0||String(b.phone||"").indexOf(q)>=0):[]; return L.length?R("Ho trovato "+L.length+" prenotazioni:\n"+L.slice(0,6).map(b=>"• "+nm(b)+" · "+ST[b.st]).join("\n"),[{label:"Apri le prenotazioni",act:"adm:book:all",pri:true}]):R("Non trovo prenotazioni con questo nome o telefono."); }
+  if(o.veh&&/occupat|disponibil|liber|bloccat/.test(x)){const f=byId(o.veh),D=Array.from({length:14},(_,i)=>dISO(i)).filter(dy=>blocked(f.id,dy)); return R(D.length?nameOf(f)+" non è disponibile in questi giorni: "+D.map(fmtDate).join(", ")+".":nameOf(f)+" non ha giorni bloccati nei prossimi 14 giorni.",[{label:"Apri le prenotazioni",act:"adm:book:all"}]); }
+  if(o.date){const L=B.filter(b=>b.date===o.date&&b.st!=="rejected"); return R(L.length?"Per "+tLongDate(o.date)+" ci sono "+L.length+" prenotazioni:\n"+L.map(b=>"• "+nm(b)+" · "+ST[b.st]).join("\n"):"Per "+tLongDate(o.date)+" non ci sono prenotazioni.",[{label:"Apri le prenotazioni",act:"adm:book:all"}]); }
+  if(/nuov|da gestire|in attesa|da confermare|richiest/.test(x)){const L=B.filter(b=>b.st==="new"); return R(L.length?"Ci sono "+L.length+" richieste nuove:\n"+L.slice(0,6).map(b=>"• "+nm(b)).join("\n")+"\nPer confermarle o rifiutarle apri l'elenco: decidi tu ogni pratica.":"Non ci sono richieste nuove.",[{label:"Apri le richieste nuove",act:"adm:book:new",pri:true}]); }
+  return R("In quest'area posso dirti le richieste nuove, le prenotazioni di una data, i giorni bloccati di un mezzo, cercare un cliente, i documenti da verificare e le statistiche. Non confermo né modifico nulla da solo.");
+}
+const _tr=tinoRender; tinoRender=function(){ _tr(); $("#tino").classList.toggle("adm-mode",tinoAdmin); if(tinoAdmin){const q=$("#tino .t-q"); if(q) q.innerHTML=T_ADMQ.map(l=>`<button data-ta="q:adm">${l}</button>`).join("");} };
+const _tc=tinoClose; tinoClose=function(){ const was=tinoAdmin; _tc(); if(was){tinoAdmin=false;tMsgs=[];$("#tino").classList.remove("adm-mode");document.body.style.overflow="hidden";} };
+const _ta2=tAnswer; tAnswer=function(raw){ return tinoAdmin?tAdminAnswer(raw):_ta2(raw); };
+const _ra3=renderAdmin; renderAdmin=function(k){ _ra3(k); const tr=$("#admin .ad-tr"); if(tr&&!tr.querySelector(".ad-tino")){const b=document.createElement("button");b.className="ad-tino";b.dataset.a="tino";b.innerHTML=`<img src="${TINO_ICON}" alt="">TINO`;tr.insertBefore(b,tr.firstChild);} };
+$("#admin").addEventListener("click",e=>{ if(!e.target.closest('[data-a="tino"]')) return; tinoAdmin=true; tMsgs=[{who:"t",text:"Ciao, sono TINO in modalità gestore. Posso cercare pratiche e prepararti le azioni; le decisioni restano a te."}]; tCtx={};tAsk=null; tinoOpen(); });
+$("#tino").addEventListener("click",e=>{ const el=e.target.closest('[data-ta^="adm:"]'); if(!el) return; const p=el.dataset.ta.split(":"); tinoClose(); adTab=p[1]; if(p[2]) bkF=p[2]; renderAdmin(); });
+
+/* registrazione audio vera con indicatore di livello; la trascrizione lato server si accende con TINO_STT_URL */
+const TINO_STT_URL="";
+let tStream=null,tAud=null,tRaf=null,tMR=null,tChunks=[];
+const tMobile=/android|iphone|ipad|ipod/i.test(navigator.userAgent||"");
+function tLevelStart(stream){ try{const C=window.AudioContext||window.webkitAudioContext; if(!C) return; tAud=new C(); const an=tAud.createAnalyser(); an.fftSize=256; tAud.createMediaStreamSource(stream).connect(an); const buf=new Uint8Array(an.frequencyBinCount);
+  const loop=()=>{an.getByteTimeDomainData(buf);let mx=0;for(let i=0;i<buf.length;i++){const v=Math.abs(buf[i]-128);if(v>mx)mx=v;} const bar=document.getElementById("tLvl"); if(bar)bar.style.width=Math.min(100,Math.round(mx*1.800))+"%"; tRaf=requestAnimationFrame(loop);}; loop();}catch(e){} }
+function tMediaStop(){ if(tRaf){cancelAnimationFrame(tRaf);tRaf=null;} if(tAud){try{tAud.close();}catch(e){} tAud=null;} if(tStream){try{tStream.getTracks().forEach(x=>x.stop());}catch(e){} tStream=null;} const bar=document.getElementById("tLvl"); if(bar)bar.style.width="0"; }
+function tSrvStart(){
+  if(tMR||tRec) return; tShut(); const my=++tTurn; tCancelled=false;tLimit=false;tSecs=0;tChunks=[];
+  tRec={stop(){ if(tMR&&tMR.state!=="inactive") tMR.stop(); },abort(){ if(tMR&&tMR.state!=="inactive") tMR.stop(); else tMediaStop(); }};
+  navigator.mediaDevices.getUserMedia({audio:{noiseSuppression:true,echoCancellation:true}}).then(stream=>{
+    const drop=()=>{try{stream.getTracks().forEach(x=>x.stop());}catch(e){}};
+    if(my!==tTurn||tCancelled){drop();return;}
+    if(!tHeld){drop();tRec=null;tPush({who:"t",text:t("tAgain")});return;}   /* permesso arrivato a dito già rilasciato: nessuna registrazione nascosta */
+    tStream=stream; const mime=["audio/webm;codecs=opus","audio/mp4","audio/ogg;codecs=opus","audio/webm"].find(m=>{try{return MediaRecorder.isTypeSupported(m);}catch(e){return false;}})||"";
+    const mr=new MediaRecorder(stream,mime?{mimeType:mime}:undefined); tMR=mr;
+    mr.ondataavailable=e=>{ if(e.data&&e.data.size) tChunks.push(e.data); };
+    mr.onstop=()=>{ const blob=new Blob(tChunks,{type:mr.mimeType||mime||"application/octet-stream"}); tChunks=[]; tMR=null; tRec=null; clearInterval(tTimer); tRecUI(false); tMediaStop();
+      if(my!==tTurn||tCancelled){ if(tState==="listening"||tState==="transcribing")tSet("idle"); return; }
+      if(blob.size<1200){tSet("idle");tPush({who:"t",text:t("tNoHear")});return;}
+      tSet("transcribing");
+      fetch(TINO_STT_URL,{method:"POST",headers:{"Content-Type":blob.type,"x-lang":lang},body:blob}).then(r=>r.ok?r.json():Promise.reject()).then(j=>{ if(my!==tTurn) return; const txt=String(j&&j.text||"").trim();
+        if(!txt){tSet("idle");tPush({who:"t",text:t("tNoHear")});return;} if(tLimit){const i=document.getElementById("tIn"); if(i)i.value=txt; tSet("idle"); tPush({who:"t",text:t("tLimit")}); return;} tinoSend(txt,true);
+      }).catch(()=>{ if(my!==tTurn) return; tSet("error"); tPush({who:"t",text:t("tSrErr")}); }); };
+    mr.start(250); tSet("listening"); tRecUI(true); tLevelStart(stream);
+    clearInterval(tTimer); tTimer=setInterval(()=>{tSecs++;const e=document.getElementById("tRecT"); if(e)e.textContent=Math.floor(tSecs/60)+":"+String(tSecs%60).padStart(2,"0"); if(tSecs>=60){tLimit=true;tRecStop();}},1000);
+  }).catch(()=>{ if(my!==tTurn) return; tRec=null; tPush({who:"t",text:t("tDenied")}); });
+}
+const _rs=tRecStart; tRecStart=function(){
+  if(TINO_STT_URL&&navigator.mediaDevices&&window.MediaRecorder) return tSrvStart();
+  _rs();
+  /* con il riconoscimento del browser l'indicatore di livello si attiva solo su computer: su telefono due accessi al microfono possono interrompere l'ascolto */
+  if(tRec&&!tMobile&&navigator.mediaDevices&&navigator.mediaDevices.getUserMedia){ const r=tRec; navigator.mediaDevices.getUserMedia({audio:true}).then(s=>{ if(tRec!==r){try{s.getTracks().forEach(x=>x.stop());}catch(e){} return;} tStream=s; tLevelStart(s); }).catch(()=>{}); }
+};
+const _rui=tRecUI; tRecUI=function(on){ _rui(on); if(!on&&!tMR) tMediaStop(); };
+if(!SRC&&TINO_STT_URL) { /* senza riconoscimento del browser il microfono compare solo se c'è la trascrizione lato server */ }
 
 document.addEventListener("click",e=>{
   const m=$("#langMenu"),b=$("#langBtn"),tg=e.target.closest?e.target:e.target.parentNode;
