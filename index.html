@@ -6,6 +6,10 @@
 <meta name="robots" content="noindex,nofollow">
 <meta name="theme-color" content="#0aa3a6">
 <meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Ti Noleggio">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-192.png">
 <title>Ti Noleggio Barche App</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -463,6 +467,18 @@ div.pick{cursor:default}
 .wxh p{font-size:14px;margin-top:8px}
 .wxlink{display:inline-block;font-size:12.500px;font-weight:700;margin-top:4px}
 
+/* itinerari, richieste speciali, accesso, installazione */
+.itin{flex:0 0 250px;scroll-snap-align:start;background:var(--card);border-radius:22px;padding:14px 16px;box-shadow:var(--shadow)}
+.itin b{font-family:var(--display);font-weight:600;font-size:16px;display:block}
+.itin em{font-style:normal;display:inline-block;font-size:12px;font-weight:800;background:rgba(255,194,77,.3);border-radius:999px;padding:3px 9px;margin:6px 0}
+.itin p{font-size:14px;color:var(--muted);white-space:pre-line}
+.itin.w{flex:none;margin-bottom:12px}
+.okmsg{color:#16845b;font-size:13.500px;font-weight:800;margin-top:10px}
+.inst{margin-top:16px}
+.inst p{font-size:13px;color:var(--muted);margin-top:8px}
+.sbst{font-size:13.500px;font-weight:800;margin:6px 0}
+.sbst.on{color:#16845b}.sbst.off{color:var(--muted)}
+
 /* galleria a tutto schermo */
 .lb{position:fixed;inset:0;z-index:50;background:rgba(3,22,26,.95);display:none;align-items:center;justify-content:center}
 .lb.on{display:flex}
@@ -819,6 +835,7 @@ function vHome(){
   <section style="padding-top:12px"><div class="block">${ph(IMG.banner,t("fleetTitle"),t("aboutTitle"),ICON.wheel)}<div class="block-b"><h3>${t("aboutTitle")}</h3><p>${t("aboutText")}</p><a class="btn btn-line btn-block" href="#preparati">${t("more")}</a></div></div></section>
   <section style="padding-top:8px"><div class="sec-head"><h2>${t("galleryTitle")}</h2></div>
     <div class="rail">${[1,2,3,4,5,6,7].map(i=>galPh(i,"gal")).join("")}</div></section>
+  ${homeExtras()}
   <section style="padding-top:12px"><div class="sec-head"><h2>${t("faqTitle")}</h2></div>
     <div class="faq">${t("faq").concat(A.faqs.map(f=>[escH(f.q),escH(f.a)])).map(q=>`<details><summary>${q[0]}</summary><p>${q[1]}</p></details>`).join("")}</div></section>
   <section><div class="rows">
@@ -861,7 +878,7 @@ function vPrep(){
   <div class="block">${ph(IMG.map,t("mapTitle"),t("mapTitle"),ICON.pin)}<div class="block-b"><h3>${t("mapTitle")}</h3><p>${t("mapText")}</p><a class="btn btn-line btn-block" href="${CONTACT.routeMap}" target="_blank" rel="noopener">${t("mapBtn")}</a></div></div>
   <div class="block">${ph(IMG.meteo,t("meteoTitle"),t("meteoTitle"),ICON.info)}<div class="block-b"><h3>${t("meteoTitle")}</h3><p>${t("meteoText")}</p>${wxCard()}<a class="wxlink" href="${CONTACT.meteo}" target="_blank" rel="noopener">${t("wxOff")}</a></div></div>
   <div class="block"><div class="block-b"><h3>${t("aboutTitle")}</h3><p>${t("aboutText")}</p><div class="grid3">${IMG.gallery.map((g,i)=>galPh(i)).join("")}</div></div></div>
-  <div class="block"><div class="block-b"><h3>${t("groupsTitle")}</h3><p>${t("groupsText")}</p><button class="btn btn-primary btn-block" data-book="">${t("book")}</button></div></div></section>`;
+  ${itinBlock()}<div class="block"><div class="block-b"><h3>${t("groupsTitle")}</h3><p>${t("groupsText")}</p><button class="btn btn-primary btn-block" data-sp="group">${t("groupT")}</button></div></div></section>`;
 }
 function vContact(){
   const tel=n=>"tel:"+n.replace(/ /g,"");
@@ -880,8 +897,9 @@ function vContact(){
     <a class="row" href="${CONTACT.yard}" target="_blank" rel="noopener">${ICON.wheel}<div><small>${t("yard")}</small><b>${t("yardS")} · nautica-guarino.ch</b></div></a>
     <a class="row" href="${base}" target="_blank" rel="noopener">${ICON.link}<div><small>${t("web")}</small><b>tinoleggiobarche.ch</b></div></a>
   </div>
+  ${installUI()}
   <div class="sec-head" style="margin-top:24px"><h2>${t("myReq")}</h2></div>
-  <div class="rows">${myReqs.length?myReqs.map((r,i)=>{const b=byId(r.v); if(!b) return ""; return `<div class="rq"><b>${nameOf(b)} · ${r.date.split("-").reverse().join(".")} · ${r.time}</b><span>${t(r.dur)} · CHF ${r.price} · ${r.people} ${t("lPeople").toLowerCase()}</span><span>${t("via")} ${r.via==="mail"?"e-mail":r.via==="wa"?"WhatsApp":t("viaCopy")} · ${new Date(r.ts).toLocaleDateString(lang)}</span><div class="rq-a"><button data-repeat="${i}">${t("repeat")}</button><button data-del="${i}">${t("del")}</button></div></div>`;}).join(""):`<p class="empty">${t("noMyReq")}</p>`}</div>
+  <div class="rows">${myReqs.length?myReqs.map((r,i)=>{const b=byId(r.v); if(!b) return ""; return `<div class="rq"><b>${nameOf(b)} · ${r.date.split("-").reverse().join(".")} · ${r.time}</b><span>${t(r.dur)} · CHF ${r.price} · ${r.people} ${t("lPeople").toLowerCase()}</span><span>${t("via")} ${r.via==="auto"?"app":r.via==="mail"?"e-mail":r.via==="wa"?"WhatsApp":t("viaCopy")} · ${new Date(r.ts).toLocaleDateString(lang)}</span><div class="rq-a"><button data-repeat="${i}">${t("repeat")}</button><button data-del="${i}">${t("del")}</button></div></div>`;}).join(""):`<p class="empty">${t("noMyReq")}</p>`}</div>
   <p class="foot">${t("savedHere")}</p>
   <div class="legal"><a href="${base}informativa-privacy" target="_blank" rel="noopener">${t("privacy")}</a><a href="${base}informativa-cookie" target="_blank" rel="noopener">${t("cookie")}</a><a href="${base}informativa-legale" target="_blank" rel="noopener">${t("legal")}</a><a href="${base}accessibility-policy" target="_blank" rel="noopener">${t("access")}</a></div>
   <p class="foot">© tinoleggiobarche.ch 2026 · Anteprima realizzata da BIZ 4 APPS</p></section>`;
@@ -994,6 +1012,7 @@ function renderSheet(){
       ${hasPromo()?`<div class="f w"><label for="fPromo">${t("lPromo")}</label><input type="text" id="fPromo" autocapitalize="characters" autocomplete="off" value="${esc(draft.promo)}">${draft.promo&&!promoFor(draft.promo)?`<span class="ferr">${t("errPromo")}</span>`:""}</div>`:""}
     </form>
     <div class="summary"><div><span>${t("lVehicle")}</span><b>${items().map(i=>nameOf(byId(i.v))+(items().length>1?" · "+t(i.dur):"")).join("<br>")}</b></div><div><span>${t("lDate")}</span><b>${fmtDate(draft.date)} · ${draft.time}</b></div><div><span>${t("lDur")}</span><b>${t(draft.dur)}</b></div><div><span>${t("lPeople")}</span><b>${esc(draft.people)}</b></div><div><span>${t("est")}${anyFuel()?" "+t("mFuel"):""}</span><b>CHF ${finalTotal()}${promoFor(draft.promo)?" (−"+promoFor(draft.promo).pct+"%)":""}</b></div></div>
+    ${depositUI()}
     ${offSeason(draft.date)?`<p class="warn" style="margin-top:10px">${t("offSeason")}</p>`:""}`;
   }
   const st=[t("st1"),t("st2"),t("st3")].map((s,i)=>`<div class="step ${i+1<step?"done":i+1===step?"cur":""}">${i+1}. ${s}</div>`).join("");
@@ -1003,7 +1022,8 @@ function renderSheet(){
   <p class="err" id="fErr"></p>
   ${step===2?`<div class="nav2"><button class="btn btn-line" id="stepBack">${t("backB")}</button><button class="btn btn-primary" id="stepNext">${t("next")}</button></div>`:""}
   ${step===3?`<div class="send">
-    <a class="btn btn-primary btn-block" id="sendMail" href="#">${t("sendMail")}</a>
+    ${autoOn()?`<button class="btn btn-primary btn-block" id="sendAuto">${t("sendAuto")}</button>`:""}
+    <a class="btn ${autoOn()?"btn-line":"btn-primary"} btn-block" id="sendMail" href="#">${t("sendMail")}</a>
     ${A.waOn?`<a class="btn btn-line btn-block" id="sendWa" href="#" target="_blank" rel="noopener">${t("sendWa")}</a>`:""}
     <button class="btn btn-line btn-block" id="copyMsg">${t("copy")}</button>
     <button class="btn btn-line btn-block" id="stepBack">${t("backB")}</button>
@@ -1081,7 +1101,7 @@ document.addEventListener("click",e=>{
 });
 document.addEventListener("change",e=>{
   const id=e.target.id, v=e.target.value;
-  if(id==="langSel"){lang=v; store.set("tnb-lang-j",v); try{localStorage.setItem("tnb-lang",v);}catch(x){} const open=$("#scrim").classList.contains("open"); if(open&&sheetMode==="book") readStep(); render(true); if(open){sheetMode==="cmp"?openCompare():sheetMode==="wiz"?renderWiz():renderSheet();} return;}
+  if(id==="langSel"){lang=v; store.set("tnb-lang-j",v); try{localStorage.setItem("tnb-lang",v);}catch(x){} const open=$("#scrim").classList.contains("open"); if(open&&sheetMode==="book") readStep(); render(true); if(open){sheetMode==="cmp"?openCompare():sheetMode==="wiz"?renderWiz():sheetMode==="sp"?renderSp():sheetMode==="login"?renderLogin():renderSheet();} return;}
   if(id==="selPeople"){fPeople=+v;render(true);return;}
   if(id==="selBudget"){fBudget=+v;render(true);return;}
   if(id==="selSort"){fSort=v;render(true);return;}
@@ -1098,11 +1118,12 @@ const T4={it:{lPromo:"Codice promo",errPromo:"Codice non valido o scaduto",unava
 for(const l in T4) Object.assign(T[l],T4[l]);
 ICON.bell='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9a6 6 0 0112 0c0 6 2 7 2 7H4s2-1 2-7z"/><path d="M10 20a2 2 0 004 0"/></svg>';
 const clone=o=>JSON.parse(JSON.stringify(o));
-const AD0={demo:true,status:{},notifs:[],nread:{},ndel:{},prefs:{},banner:{on:false,text:"",tone:"info"},promos:[],contact:{},waOn:true,faqs:[],season:[3,9],fleet:{},fails:0,lockUntil:0,wxDay:"",blocks:[],manual:[],notes:{}};
+const AD0={demo:true,status:{},notifs:[],nread:{},ndel:{},prefs:{},banner:{on:false,text:"",tone:"info"},promos:[],contact:{},waOn:true,faqs:[],season:[3,9],fleet:{},fails:0,lockUntil:0,wxDay:"",blocks:[],manual:[],notes:{},itins:[],giftOn:true,reviewUrl:"",dep:{on:false,pct:30,url:""},notifyUrl:"",autoBlock:true,busy:[],lang:"it",sb:{url:"",key:""}};
 let A=Object.assign(clone(AD0),store.get("tnb-adm",{}));
 let PIN=String(store.get("tnb-pin","1234"));
+let RQ=[], RS=[], SP=store.get("tnb-sp",[]);
 let AN=store.get("tnb-an",{});
-const saveA=()=>store.set("tnb-adm",A);
+const saveA=()=>{store.set("tnb-adm",A); sbPush();};
 const FLEET0=clone(FLEET), CONTACT0=Object.assign({},CONTACT);
 function applyCfg(){
   FLEET.forEach((b,i)=>{const o=A.fleet[b.id]||{}; b.prices=Object.assign({},FLEET0[i].prices,o.prices||{}); b.off=!!o.off;});
@@ -1150,8 +1171,8 @@ const NTD={req:"nuove richieste di prenotazione",wx:"raffiche oltre 30 km/h a Mu
 const DEMONT=[["req","Nuova richiesta: IDEA 58","Cliente demo 3 chiede 1 giornata per 6 persone.",2],["wx","Vento in aumento","Raffiche previste oltre 30 km/h nel pomeriggio.",5],["mkt","Promo in scadenza","Il codice LAGO10 scade tra 3 giorni.",26],["sys","Open 7 di nuovo disponibile","Manutenzione conclusa.",49],["req","Richiesta confermata","Cliente demo 1, Open 5, mezza giornata.",73]]
   .map((x,i)=>({id:"dn"+i,type:x[0],title:x[1],text:x[2],ts:Date.now()-x[3]*36e5,demo:true}));
 function bookings(){
-  const L=myReqs.map(r=>({id:"L"+r.ts,v:r.v,date:r.date,time:r.time,dur:r.dur,price:r.price,people:r.people,name:r.name,phone:r.phone,notes:r.notes,via:r.via,promo:r.promo,more:r.more,st0:"new"}));
-  return L.concat(A.manual.map(m=>Object.assign({st0:"confirmed",manual:true},m)),A.demo?DEMOBK.map(b=>Object.assign({},b)):[]).map(b=>Object.assign(b,{st:A.status[b.id]||b.st0})).sort((a,b)=>(a.date+a.time<b.date+b.time?1:-1));
+  const L=myReqs.filter(r=>!RQ.some(q=>q.ts===r.ts)).map(r=>({id:"L"+r.ts,v:r.v,date:r.date,time:r.time,dur:r.dur,price:r.price,people:r.people,name:r.name,phone:r.phone,notes:r.notes,via:r.via,promo:r.promo,more:r.more,st0:"new"}));
+  return L.concat(RQ,A.manual.map(m=>Object.assign({st0:"confirmed",manual:true},m)),A.demo?DEMOBK.map(b=>Object.assign({},b)):[]).map(b=>Object.assign(b,{st:A.status[b.id]||b.st0})).sort((a,b)=>(a.date+a.time<b.date+b.time?1:-1));
 }
 function notifs(){return A.notifs.concat(A.demo?DEMONT:[]).filter(n=>!A.ndel[n.id]).sort((a,b)=>b.ts-a.ts);}
 function pushNotif(type,title,text){if(A.prefs[type]===false)return;A.notifs.unshift({id:"n"+Date.now()+Math.floor(Math.random()*1e4),type,title,text,ts:Date.now()});A.notifs=A.notifs.slice(0,60);saveA();}
@@ -1211,7 +1232,7 @@ function adBook(){
   ${card("Prossimi 7 giorni",`<div class="wk">${wk.map(iso=>{const n=B.filter(b=>b.date===iso&&b.st!=="rejected").length;return `<div class="${n?"has":""}"><span>${new Date(iso+"T12:00").toLocaleDateString("it",{weekday:"short"})}</span><b>${iso.slice(8)}</b><i>${n||"·"}</i></div>`;}).join("")}</div>`)}
   <div class="ad-2">${L.length?L.map(b=>{const f=byId(b.v),tel=String(b.phone||"").replace(/[^\d+]/g,"");const xn=(b.more||[]).map(x=>byId(x.v)).filter(Boolean).map(nameOf);return `<div class="ad-card bk" data-s="${escH(((f?nameOf(f):b.v)+" "+xn.join(" ")+" "+(b.name||"")+" "+(b.phone||"")+" "+fmtDate(b.date)).toLowerCase())}"><div class="bk-h"><h3>${f?nameOf(f):escH(b.v)}${xn.length?" + "+xn.join(" + "):""}${b.demo?' <em class="dm">demo</em>':""}</h3><span class="pill s-${b.st}">${ST[b.st]}</span></div>
     <p><b>${fmtDate(b.date)} · ${escH(b.time)}</b> · ${t(b.dur)} · ${escH(b.people)} pers. · CHF ${escH(b.price)}${b.promo?" · promo "+escH(b.promo):""}</p>
-    <p>${escH(b.name)}${b.phone?" · "+escH(b.phone):""}${b.via?" · via "+(b.via==="tel"?"telefono":b.via==="mail"?"e-mail":b.via==="wa"?"WhatsApp":"testo copiato"):""}</p>${b.notes?`<p class="mut">${escH(b.notes)}</p>`:""}
+    <p>${escH(b.name)}${b.phone?" · "+escH(b.phone):""}${b.via?" · via "+(b.via==="auto"?"app":b.via==="tel"?"telefono":b.via==="mail"?"e-mail":b.via==="wa"?"WhatsApp":"testo copiato"):""}</p>${b.notes?`<p class="mut">${escH(b.notes)}</p>`:""}
     <div class="bk-a">${b.st!=="confirmed"&&b.st!=="done"?`<button data-a="st:${b.id}:confirmed" class="ok">Conferma</button>`:""}${b.st==="new"||b.st==="confirmed"?`<button data-a="st:${b.id}:rejected">Rifiuta</button>`:""}${b.st==="confirmed"?`<button data-a="st:${b.id}:done">Completata</button>`:""}${b.st!=="new"?`<button data-a="st:${b.id}:new">Riapri</button>`:""}${tel?`<a href="tel:${tel}">Chiama</a><a href="https://wa.me/${tel.replace(/\D/g,"")}" target="_blank" rel="noopener">WhatsApp</a>`:""}${b.manual?`<button data-a="bkDel:${b.id}">Elimina</button>`:""}</div><label class="ad-l">Nota interna<textarea rows="1" data-c="note:${b.id}">${escH(A.notes[b.id])}</textarea></label></div>`;}).join(""):`<p class="ad-empty">Nessuna richiesta in questo stato.</p>`}</div>
   <div class="ad-2">${adAvail()}${card("Esporta prenotazioni (CSV)",`<button class="ad-btn" data-a="csv">Prepara CSV</button><textarea id="csvOut" readonly rows="5" class="ad-out" style="display:none" aria-label="Prenotazioni in formato CSV"></textarea><div class="bk-a"><button data-a="copy:csvOut">Copia</button></div><p class="ad-note">Incolla il testo in un file .csv o in un foglio di calcolo (separatore: punto e virgola).</p>`)}</div>
   <p class="ad-note">Le richieste reali sono quelle inviate da questo dispositivo. Senza un server, quelle degli altri clienti arrivano solo via e-mail o WhatsApp.</p>`;
@@ -1231,8 +1252,9 @@ function adTraf(){
 }
 const CAMP=[{n:"Apertura stagione",it:"Il lago ti aspetta! Tornano barche senza patente, pedalò e SUP sul Lungolago di Muralto. Scopri la flotta e prenota: {link}{promo}",de:"Der See ruft! Boote ohne Führerschein, Tretboote und SUP sind zurück am Lungolago di Muralto. Flotte ansehen und buchen: {link}{promo}",en:"The lake is calling! Licence-free boats, pedal boats and SUPs are back on the Lungolago di Muralto. See the fleet and book: {link}{promo}"},
   {n:"Offerta infrasettimanale",it:"Lago tutto per te da lunedì a giovedì: più scelta di barche e meno attesa a Muralto. Richiedi la tua data: {link}{promo}",de:"Der See fast für dich allein, Montag bis Donnerstag: mehr Auswahl und weniger Wartezeit in Muralto. Wunschtermin anfragen: {link}{promo}",en:"Have the lake almost to yourself, Monday to Thursday: more boats to choose from and less waiting in Muralto. Request your date: {link}{promo}"},
+  {n:"Chiedi una recensione",it:"Grazie per aver scelto Ti Noleggio Barche! Se ti sei trovato bene, ci lasci una recensione? Ci aiuta molto: {review}{promo}",de:"Danke, dass du Ti Noleggio Barche gewählt hast! Wenn es dir gefallen hat, hinterlässt du uns eine Bewertung? Das hilft uns sehr: {review}{promo}",en:"Thank you for choosing Ti Noleggio Barche! If you enjoyed it, would you leave us a review? It helps us a lot: {review}{promo}"},
   {n:"Last minute bel tempo",it:"Sole e poco vento in arrivo sul Lago Maggiore: ci sono ancora barche libere a Muralto. Prenota ora: {link}{promo}",de:"Sonne und wenig Wind am Lago Maggiore: in Muralto sind noch Boote frei. Jetzt buchen: {link}{promo}",en:"Sunshine and light wind on Lake Maggiore: boats are still available in Muralto. Book now: {link}{promo}"}];
-function campText(){const p=A.promos.find(promoOk);return CAMP[campT][campL].replace("{link}",CONTACT.site).replace("{promo}",p?(campL==="it"?` Codice ${p.code}: −${p.pct}%.`:campL==="de"?` Code ${p.code}: −${p.pct}%.`:` Code ${p.code}: ${p.pct}% off.`):"");}
+function campText(){const p=A.promos.find(promoOk);return CAMP[campT][campL].replace("{review}",reviewUrl()).replace("{link}",CONTACT.site).replace("{promo}",p?(campL==="it"?` Codice ${p.code}: −${p.pct}%.`:campL==="de"?` Code ${p.code}: −${p.pct}%.`:` Code ${p.code}: ${p.pct}% off.`):"");}
 function adMkt(){
   const tx=campText();
   return `<div class="ad-2">${card("Codici promo",`${A.promos.length?`<div>${A.promos.map((p,i)=>`<div class="pl-r"><div><b>${escH(p.code)}</b><span>−${p.pct}%${p.exp?" · fino al "+fmtDate(p.exp):""}${p.exp&&p.exp<dISO()?" · scaduto":""}</span></div><label class="sw"><input type="checkbox" data-c="promoTog:${i}" ${p.on?"checked":""} aria-label="Attivo"><i></i></label><button data-a="promoDel:${i}" aria-label="Elimina">×</button></div>`).join("")}</div>`:`<p class="ad-empty">Nessun codice. Creane uno: il cliente lo inserisce nel modulo di prenotazione e lo sconto entra nella richiesta.</p>`}
@@ -1277,7 +1299,7 @@ function openAdmin(){
 /* passcode */
 function drawPin(msg,bad){$("#pinDots").innerHTML=[0,1,2,3].map(i=>`<i class="${i<pinBuf.length?"f":""}"></i>`).join("");const m=$("#pinMsg");m.textContent=msg||"Inserisci il passcode";m.className=bad?"bad":"";}
 function openPin(){pinBuf="";drawPin();$("#pin").classList.add("on");}
-$("#lockBtn").addEventListener("click",openPin);
+$("#lockBtn").addEventListener("click",()=>{ if(!sbOn()) return openPin(); if(sbTok){openAdmin();sbLoadAll();} else openLogin(); });
 $("#pin").addEventListener("click",e=>{
   if(e.target.id==="pin"){$("#pin").classList.remove("on");return;}
   const b=e.target.closest("[data-p]"); if(!b) return; const k=b.dataset.p;
@@ -1357,7 +1379,7 @@ const baseTotal=()=>items().reduce((a,i)=>a+(byId(i.v).prices[i.dur]||0),0);
 const finalTotal=()=>{const p=promoFor(draft.promo),b=baseTotal();return p?Math.round(b*(100-p.pct)/100):b;};
 const seatsAll=()=>items().reduce((a,i)=>a+maxSeats(byId(i.v)),0);
 const anyFuel=()=>items().some(i=>byId(i.v).fuel);
-const blocked=(v,date)=>!!date&&A.blocks.some(k=>(k.v==="all"||k.v===v)&&date>=k.from&&date<=k.to);
+const blocked=(v,date)=>!!date&&(A.blocks.some(k=>(k.v==="all"||k.v===v)&&date>=k.from&&date<=k.to)||(A.autoBlock!==false&&confirmedFor(v,date)>=stockOf(v)));
 const blockedItem=()=>items().find(i=>blocked(i.v,draft.date));
 const _norm=normDraft; normDraft=function(){ _norm(); draft.more=(draft.more||[]).filter(x=>byId(x.v)&&x.v!==draft.vehicle&&!byId(x.v).off); draft.more.forEach(x=>{const f=byId(x.v); if(f.prices[x.dur]==null) x.dur=Object.keys(f.prices)[0];}); };
 function dayStrip(){return Array.from({length:14},(_,i)=>dISO(i)).map(iso=>{const off=items().some(i=>blocked(i.v,iso));return `<button type="button" class="dy" data-day="${iso}" aria-pressed="${draft.date===iso}" ${off?"disabled":""}>${new Date(iso+"T12:00").toLocaleDateString(lang,{weekday:"short"})}<b>${+iso.slice(8)}</b></button>`;}).join("");}
@@ -1450,6 +1472,199 @@ $("#admin").addEventListener("input",e=>{
   if(e.target.id!=="bkQ") return; const q=e.target.value.trim().toLowerCase();
   document.querySelectorAll("#admin .bk").forEach(c=>{c.style.display=!q||c.dataset.s.indexOf(q)>=0?"":"none";});
 });
+
+
+/* ================= ESTENSIONI 2: database, richieste speciali, itinerari, recensioni, acconto, installazione ================= */
+/* Da compilare per collegare tutti i dispositivi allo stesso database e all'avviso automatico */
+const SB_BAKED={url:"",key:""};
+const NOTIFY_BAKED="";
+
+const T7={
+it:{spTitle:"Buoni regalo e gruppi",giftT:"Buono regalo",giftS:"Regala un'uscita sul lago",groupT:"Gruppi ed eventi",groupS:"Team, compleanni, feste",gAmount:"Importo del buono (CHF)",gFor:"Per chi è",gMsg:"Messaggio per chi lo riceve",evType:"Tipo di evento",evOpts:["Evento aziendale","Compleanno o festa","Altro"],spLeadGift:"Compila la richiesta: il noleggio ti ricontatta per pagamento e consegna del buono.",spLeadGroup:"Raccontaci l'evento: il noleggio ti prepara una proposta.",errAmount:"Indica un importo.",mGift:"Buongiorno, vorrei un buono regalo:",mGroup:"Buongiorno, vorrei organizzare un'uscita di gruppo:",itinT:"Itinerari consigliati",revT:"Recensioni",revLead:"Leggi cosa dice chi ha già noleggiato, o lascia la tua opinione.",revRead:"Recensioni su Google",instBtn:"Installa l'app",instIos:"Su iPhone: tocca Condividi, poi «Aggiungi alla schermata Home».",instLead:"Aggiungi l'app alla schermata Home per aprirla come un'app.",depLead:"Per confermare la prenotazione è richiesto un acconto del {p}%: CHF {a}.",depPay:"Paga l'acconto",sendAuto:"Invia la richiesta al noleggio",sentOk:"Richiesta inviata al noleggio.",sentFail:"Invio non riuscito: usa e-mail o WhatsApp qui sotto.",loginT:"Accesso gestore",loginB:"Accedi",loginErr:"Accesso non riuscito: controlla e-mail e password.",pwd:"Password"},
+de:{spTitle:"Gutscheine und Gruppen",giftT:"Geschenkgutschein",giftS:"Verschenke einen Ausflug auf dem See",groupT:"Gruppen und Events",groupS:"Teams, Geburtstage, Feste",gAmount:"Gutscheinbetrag (CHF)",gFor:"Für wen",gMsg:"Nachricht für die beschenkte Person",evType:"Art des Anlasses",evOpts:["Firmenanlass","Geburtstag oder Fest","Anderes"],spLeadGift:"Fülle die Anfrage aus: die Vermietung meldet sich für Zahlung und Übergabe des Gutscheins.",spLeadGroup:"Erzähl uns vom Anlass: die Vermietung erstellt dir ein Angebot.",errAmount:"Bitte einen Betrag angeben.",mGift:"Guten Tag, ich möchte einen Geschenkgutschein:",mGroup:"Guten Tag, ich möchte einen Gruppenausflug organisieren:",itinT:"Empfohlene Routen",revT:"Bewertungen",revLead:"Lies, was andere Gäste sagen, oder teile deine Meinung.",revRead:"Bewertungen auf Google",instBtn:"App installieren",instIos:"Auf dem iPhone: Teilen antippen, dann «Zum Home-Bildschirm».",instLead:"Füge die App zum Home-Bildschirm hinzu und öffne sie wie eine App.",depLead:"Zur Bestätigung ist eine Anzahlung von {p}% nötig: CHF {a}.",depPay:"Anzahlung bezahlen",sendAuto:"Anfrage an die Vermietung senden",sentOk:"Anfrage an die Vermietung gesendet.",sentFail:"Senden fehlgeschlagen: nutze unten E-Mail oder WhatsApp.",loginT:"Anmeldung Betreiber",loginB:"Anmelden",loginErr:"Anmeldung fehlgeschlagen: E-Mail und Passwort prüfen.",pwd:"Passwort"},
+fr:{spTitle:"Bons cadeaux et groupes",giftT:"Bon cadeau",giftS:"Offrez une sortie sur le lac",groupT:"Groupes et événements",groupS:"Équipes, anniversaires, fêtes",gAmount:"Montant du bon (CHF)",gFor:"Pour qui",gMsg:"Message pour le destinataire",evType:"Type d'événement",evOpts:["Événement d'entreprise","Anniversaire ou fête","Autre"],spLeadGift:"Remplissez la demande : le loueur vous recontacte pour le paiement et la remise du bon.",spLeadGroup:"Parlez-nous de l'événement : le loueur vous prépare une proposition.",errAmount:"Indiquez un montant.",mGift:"Bonjour, je souhaite un bon cadeau :",mGroup:"Bonjour, je souhaite organiser une sortie de groupe :",itinT:"Itinéraires conseillés",revT:"Avis",revLead:"Lisez les avis des clients ou laissez le vôtre.",revRead:"Avis sur Google",instBtn:"Installer l'app",instIos:"Sur iPhone : touchez Partager, puis « Sur l'écran d'accueil ».",instLead:"Ajoutez l'app à l'écran d'accueil pour l'ouvrir comme une app.",depLead:"Pour confirmer la réservation, un acompte de {p}% est demandé : CHF {a}.",depPay:"Payer l'acompte",sendAuto:"Envoyer la demande au loueur",sentOk:"Demande envoyée au loueur.",sentFail:"Envoi impossible : utilisez l'e-mail ou WhatsApp ci-dessous.",loginT:"Accès gérant",loginB:"Se connecter",loginErr:"Connexion impossible : vérifiez e-mail et mot de passe.",pwd:"Mot de passe"},
+en:{spTitle:"Gift vouchers and groups",giftT:"Gift voucher",giftS:"Give a trip on the lake",groupT:"Groups and events",groupS:"Teams, birthdays, parties",gAmount:"Voucher amount (CHF)",gFor:"Who is it for",gMsg:"Message for the recipient",evType:"Type of event",evOpts:["Company event","Birthday or party","Other"],spLeadGift:"Fill in the request: the rental will contact you about payment and delivery of the voucher.",spLeadGroup:"Tell us about the event: the rental will prepare a proposal.",errAmount:"Enter an amount.",mGift:"Hello, I would like a gift voucher:",mGroup:"Hello, I would like to organise a group outing:",itinT:"Suggested routes",revT:"Reviews",revLead:"Read what other guests say, or leave your own opinion.",revRead:"Reviews on Google",instBtn:"Install the app",instIos:"On iPhone: tap Share, then “Add to Home Screen”.",instLead:"Add the app to your home screen to open it like an app.",depLead:"A {p}% deposit is required to confirm the booking: CHF {a}.",depPay:"Pay the deposit",sendAuto:"Send the request to the rental",sentOk:"Request sent to the rental.",sentFail:"Sending failed: use e-mail or WhatsApp below.",loginT:"Manager sign-in",loginB:"Sign in",loginErr:"Sign-in failed: check e-mail and password.",pwd:"Password"}};
+for(const l in T7) Object.assign(T[l],T7[l]);
+ICON.gift='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="9" width="18" height="4" rx="1"/><path d="M5 13v7h14v-7M12 9v11M12 9c-2 0-4-1-4-3s3-2 4 3zM12 9c2 0 4-1 4-3s-3-2-4 3z"/></svg>';
+ICON.group='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3"/><circle cx="17" cy="9" r="2.500"/><path d="M3 20c0-3.500 2.700-6 6-6s6 2.500 6 6M15.500 14.200c3 0 5.500 2 5.500 5.300"/></svg>';
+
+/* disponibilità automatica */
+const stockOf=v=>{const f=byId(v);return !f||f.id==="pedalo"?Infinity:(f.units||1);};
+function confirmedFor(v,date){
+  if(sbOn()&&!sbTok) return (A.busy||[]).filter(k=>k.v===v&&k.date===date).length;
+  return bookings().filter(b=>!b.demo&&b.st==="confirmed"&&b.date===date&&(b.v===v||(b.more||[]).some(x=>x.v===v))).length;
+}
+const busyList=()=>{const o=[],td=dISO();bookings().forEach(b=>{if(!b.demo&&b.st==="confirmed"&&b.date>=td)[{v:b.v}].concat(b.more||[]).forEach(x=>o.push({v:x.v,date:b.date}));});return o;};
+
+/* recensioni, itinerari, richieste speciali in Home e Preparati */
+const reviewUrl=()=>A.reviewUrl||"https://www.google.com/maps/search/?api=1&query=Ti+Noleggio+Barche+Muralto";
+const itinCard=(x,w)=>`<div class="itin ${w?"w":""}"><b>${escH(x.title)}</b>${x.dur?`<em>${escH(x.dur)}</em>`:""}<p>${escH(x.text)}</p></div>`;
+const itinBlock=()=>A.itins.length?`<div class="sec-head"><h2>${t("itinT")}</h2></div>${A.itins.map(x=>itinCard(x,true)).join("")}`:"";
+function homeExtras(){
+  return (A.itins.length?`<section style="padding-top:12px"><div class="sec-head"><h2>${t("itinT")}</h2></div><div class="rail">${A.itins.map(x=>itinCard(x)).join("")}</div></section>`:"")+
+  `<section style="padding-top:12px"><div class="sec-head"><h2>${t("spTitle")}</h2></div><div class="cats">${A.giftOn!==false?`<button class="cat" data-sp="gift"><i>${ICON.gift}</i><b>${t("giftT")}</b><span>${t("giftS")}</span></button>`:""}<button class="cat" data-sp="group"><i>${ICON.group}</i><b>${t("groupT")}</b><span>${t("groupS")}</span></button></div></section>
+  <section style="padding-top:20px"><div class="block" style="margin-bottom:0"><div class="block-b"><h3>${t("revT")}</h3><p>${t("revLead")}</p><a class="btn btn-line btn-block" href="${escH(reviewUrl())}" target="_blank" rel="noopener">${t("revRead")}</a></div></div></section>`;
+}
+
+/* acconto (spento finché il gestore non inserisce il link di pagamento) */
+const depOn=()=>!!(A.dep&&A.dep.on&&/^https:\/\//.test(A.dep.url||""));
+const depositUI=()=>depOn()?`<p class="warn" style="margin-top:10px">${t("depLead").replace("{p}",A.dep.pct).replace("{a}",Math.round(finalTotal()*A.dep.pct/100))}</p><a class="btn btn-line btn-block" style="margin-top:8px" href="${escH(A.dep.url)}" target="_blank" rel="noopener">${t("depPay")}</a>`:"";
+
+/* installazione */
+let instEvt=null;
+window.addEventListener("beforeinstallprompt",e=>{e.preventDefault();instEvt=e;if(route()==="contatti")render(true);});
+function installUI(){
+  let standalone=false,ios=false; try{standalone=window.matchMedia("(display-mode: standalone)").matches||navigator.standalone===true;ios=/iphone|ipad|ipod/i.test(navigator.userAgent);}catch(e){}
+  if(standalone) return ""; if(instEvt) return `<div class="inst"><button class="btn btn-line btn-block" id="instBtn">${t("instBtn")}</button><p>${t("instLead")}</p></div>`;
+  return ios?`<div class="inst"><p>${t("instIos")}</p></div>`:"";
+}
+try{ if("serviceWorker" in navigator&&location.protocol==="https:") navigator.serviceWorker.register("sw.js").catch(()=>{}); }catch(e){}
+
+/* database Supabase e avviso automatico */
+const sbCfg=()=>SB_BAKED.url?SB_BAKED:(A.sb||{});
+const sbOn=()=>!!(sbCfg().url&&sbCfg().key);
+const notifyUrl=()=>NOTIFY_BAKED||A.notifyUrl||"";
+const autoOn=()=>sbOn()||!!notifyUrl();
+let sbTok=null,sbReady=false,sbT=null,lastSend=Promise.resolve(false);
+try{sbTok=sessionStorage.getItem("tnb-tok")||null;}catch(e){}
+const PUB=["banner","promos","contact","waOn","faqs","season","fleet","blocks","itins","giftOn","reviewUrl","dep","notifyUrl","autoBlock","busy"];
+function sb(path,o){o=o||{};const c=sbCfg();
+  return fetch(String(c.url).replace(/\/+$/,"")+path,{method:o.method||"GET",headers:Object.assign({apikey:c.key,Authorization:"Bearer "+(sbTok||c.key),"Content-Type":"application/json"},o.headers||{}),body:o.body?JSON.stringify(o.body):undefined})
+    .then(r=>r.text().then(x=>{if(!r.ok)throw new Error(r.status+" "+x.slice(0,140));return x?JSON.parse(x):null;}));}
+function sbPush(){ if(!sbOn()||!sbTok||!sbReady) return; clearTimeout(sbT); sbT=setTimeout(()=>{A.busy=busyList();const d={};PUB.forEach(k=>d[k]=A[k]);sb("/rest/v1/settings",{method:"POST",headers:{Prefer:"resolution=merge-duplicates,return=minimal"},body:{id:1,data:d}}).catch(()=>{});},900); }
+function sbApply(rows){ if(rows&&rows[0]&&rows[0].data){PUB.forEach(k=>{if(rows[0].data[k]!==undefined)A[k]=rows[0].data[k];});store.set("tnb-adm",A);applyCfg();} }
+function sbLoadSettings(){ if(!sbOn()) return Promise.resolve(); return sb("/rest/v1/settings?id=eq.1&select=data").then(r=>{sbApply(r);render(true);}).catch(()=>{}); }
+function sbLoadAll(){ if(!sbOn()||!sbTok) return Promise.resolve();
+  return Promise.all([sb("/rest/v1/settings?id=eq.1&select=data"),sb("/rest/v1/requests?select=*&order=created_at.desc&limit=300")]).then(r=>{sbApply(r[0]);const rows=r[1]||[];
+    RQ=rows.filter(x=>x.kind==="booking").map(x=>Object.assign({},x.data,{id:"R"+x.id,st0:x.status||"new",remote:true}));
+    RS=rows.filter(x=>x.kind!=="booking").map(x=>Object.assign({},x.data,{id:"R"+x.id,remote:true}));
+    sbReady=true; if($("#admin").classList.contains("on")) renderAdmin(true);
+  }).catch(e=>{ if(/^401|^403/.test(e.message)){sbTok=null;try{sessionStorage.removeItem("tnb-tok");}catch(x){}} });
+}
+function remoteSend(kind,rec,msg){
+  const jobs=[]; if(sbOn()) jobs.push(sb("/rest/v1/requests",{method:"POST",headers:{Prefer:"return=minimal"},body:{ts:rec.ts,kind,status:"new",data:rec}}));
+  if(notifyUrl()) jobs.push(fetch(notifyUrl(),{method:"POST",headers:{"Content-Type":"application/json",Accept:"application/json"},body:JSON.stringify({subject:msg.subject,message:msg.body,name:rec.name||"",phone:rec.phone||""})}).then(r=>{if(!r.ok)throw new Error("notify");}));
+  if(!jobs.length) return Promise.resolve(false);
+  return Promise.all(jobs.map(j=>j.then(()=>true,()=>false))).then(a=>a.some(Boolean));
+}
+const _log2=logReq; logReq=function(via){ const n=myReqs.length; _log2(via); if(myReqs.length>n) lastSend=remoteSend("booking",myReqs[0],buildMsg()); };
+
+/* accesso gestore (solo con database attivo) */
+function renderLogin(){ $("#sheet").innerHTML=`<div class="grab"></div><div class="sheet-h"><h2 id="sheetTitle">${t("loginT")}</h2><button class="x" id="closeSheet" aria-label="×">×</button></div>
+  <form class="form" id="loginForm" novalidate><div class="f w"><label for="lgMail">${t("email")}</label><input type="email" id="lgMail" autocomplete="username"></div><div class="f w"><label for="lgPwd">${t("pwd")}</label><input type="password" id="lgPwd" autocomplete="current-password"></div></form>
+  <p class="err" id="fErr"></p><div class="send"><button class="btn btn-primary btn-block" id="sbLogin">${t("loginB")}</button></div>`; }
+function openLogin(){sheetMode="login";renderLogin();$("#scrim").classList.add("open");document.body.style.overflow="hidden";}
+
+/* richieste speciali: buono regalo e gruppi */
+let spD={type:"gift",amount:"100",people:"10"};
+function readSp(){["amount","forName","msg","date","people","ev","name","phone","notes"].forEach(k=>{const e=document.getElementById("sp-"+k); if(e) spD[k]=e.value;});}
+function renderSp(){
+  const g=spD.type==="gift",v=k=>escH(spD[k]);
+  $("#sheet").innerHTML=`<div class="grab"></div><div class="sheet-h"><h2 id="sheetTitle">${g?t("giftT"):t("groupT")}</h2><button class="x" id="closeSheet" aria-label="×">×</button></div>
+  <p class="lead" style="font-size:14px">${g?t("spLeadGift"):t("spLeadGroup")}</p>
+  <form class="form" id="spForm" novalidate>
+  ${g?`<div class="f"><label for="sp-amount">${t("gAmount")}</label><input type="number" id="sp-amount" min="10" step="10" inputmode="numeric" value="${v("amount")}"></div><div class="f"><label for="sp-forName">${t("gFor")}</label><input type="text" id="sp-forName" value="${v("forName")}"></div><div class="f w"><label for="sp-msg">${t("gMsg")}</label><textarea id="sp-msg">${v("msg")}</textarea></div>`
+     :`<div class="f"><label for="sp-date">${t("lDate")}</label><input type="date" id="sp-date" min="${dISO()}" value="${v("date")}"></div><div class="f"><label for="sp-people">${t("lPeople")}</label><input type="number" id="sp-people" min="2" inputmode="numeric" value="${v("people")}"></div><div class="f w"><label for="sp-ev">${t("evType")}</label><select id="sp-ev">${t("evOpts").map((o,i)=>`<option value="${i}" ${String(spD.ev)===String(i)?"selected":""}>${o}</option>`).join("")}</select></div><div class="f w"><label for="sp-notes">${t("lNotes")}</label><textarea id="sp-notes">${v("notes")}</textarea></div>`}
+  <div class="f w"><label for="sp-name">${t("lName")}</label><input type="text" id="sp-name" autocomplete="name" value="${v("name")||escH(draft.name)}"></div>
+  <div class="f w"><label for="sp-phone">${t("lPhone")}</label><input type="tel" id="sp-phone" autocomplete="tel" value="${v("phone")||escH(draft.phone)}"></div></form>
+  <p class="err" id="fErr"></p>
+  <div class="send">${autoOn()?`<button class="btn btn-primary btn-block" data-sps="auto">${t("sendAuto")}</button>`:""}<a class="btn ${autoOn()?"btn-line":"btn-primary"} btn-block" data-sps="mail" href="#">${t("sendMail")}</a>${A.waOn?`<a class="btn btn-line btn-block" data-sps="wa" href="#" target="_blank" rel="noopener">${t("sendWa")}</a>`:""}<button class="btn btn-line btn-block" data-sps="copy">${t("copy")}</button></div>
+  <div class="preview" id="preview"></div><p class="hint">${t("hint")} ${CONTACT.email} · ${CONTACT.tel2}</p>`;
+}
+function openSp(type){sheetMode="sp";spD.type=type;renderSp();$("#sheet").scrollTop=0;$("#scrim").classList.add("open");document.body.style.overflow="hidden";ev("special_"+type);}
+function spMsg(){
+  readSp(); const g=spD.type==="gift";
+  if(g&&!(+spD.amount>0)) return {err:t("errAmount")}; if(!g&&!spD.date) return {err:t("errDate")};
+  if(!spD.name||spD.name.trim().length<2) return {err:t("errName")}; if(!spD.phone||spD.phone.replace(/\D/g,"").length<6) return {err:t("errPhone")};
+  const L=[g?t("mGift"):t("mGroup"),""];
+  if(g){L.push(`${t("gAmount")}: ${spD.amount}`); if(spD.forName)L.push(`${t("gFor")}: ${spD.forName.trim()}`); if(spD.msg)L.push(`${t("gMsg")}: ${spD.msg.trim()}`);}
+  else{L.push(`${t("lDate")}: ${fmtDate(spD.date)}`,`${t("lPeople")}: ${spD.people}`,`${t("evType")}: ${t("evOpts")[+spD.ev||0]}`); if(spD.notes)L.push(`${t("lNotes")}: ${spD.notes.trim()}`);}
+  L.push(`${t("lName")}: ${spD.name.trim()}`,`${t("lPhone")}: ${spD.phone.trim()}`,"",t("mThanks"));
+  return {subject:(g?t("giftT"):t("groupT"))+" – "+spD.name.trim(),body:L.join("\n")};
+}
+let spLast="";
+function spLog(m,via){const key=m.body; if(key===spLast) return Promise.resolve(null); spLast=key;
+  const r=Object.assign({ts:Date.now(),via},spD); SP.unshift(r); SP=SP.slice(0,30); store.set("tnb-sp",SP); ev("sent_special");
+  pushNotif("req",(spD.type==="gift"?"Richiesta buono regalo":"Richiesta gruppo")+": "+r.name,spD.type==="gift"?"Buono da CHF "+r.amount+".":fmtDate(r.date)+", "+r.people+" persone.");
+  return remoteSend(spD.type,r,m);}
+
+document.addEventListener("click",e=>{
+  const el=e.target.closest&&e.target.closest("[data-sp],[data-sps],#sendAuto,#sbLogin,#instBtn"); if(!el) return;
+  if(el.dataset.sp){openSp(el.dataset.sp);return;}
+  if(el.id==="instBtn"){ if(instEvt){try{instEvt.prompt();}catch(x){} instEvt=null;render(true);} return; }
+  if(el.id==="sbLogin"){ const c=sbCfg(),mail=$("#lgMail").value.trim(),pw=$("#lgPwd").value; showErr("");
+    fetch(String(c.url).replace(/\/+$/,"")+"/auth/v1/token?grant_type=password",{method:"POST",headers:{apikey:c.key,"Content-Type":"application/json"},body:JSON.stringify({email:mail,password:pw})}).then(r=>r.json().then(j=>{if(!r.ok||!j.access_token)throw new Error("login");return j;}))
+      .then(j=>{sbTok=j.access_token;try{sessionStorage.setItem("tnb-tok",sbTok);}catch(x){} $("#scrim").classList.remove("open");openAdmin();sbLoadAll();}).catch(()=>showErr(t("loginErr")));
+    return; }
+  if(el.id==="sendAuto"){ readStep(); const er=validate(2)||validate(3); if(er){showErr(er);return;} showErr(""); const m=buildMsg(); const pv=$("#preview"); pv.textContent=m.body; pv.classList.add("on");
+    el.disabled=true; logReq("auto"); lastSend.then(ok=>{const E=$("#fErr"); if(!E)return; E.textContent=ok?t("sentOk"):t("sentFail"); E.className=ok?"okmsg":"err on"; el.disabled=false;}); return; }
+  if(el.dataset.sps){ const via=el.dataset.sps,m=spMsg(); if(m.err){e.preventDefault();showErr(m.err);return;} showErr(""); const pv=$("#preview"); pv.textContent=m.body; pv.classList.add("on");
+    const pr=spLog(m,via);
+    if(via==="mail"){el.href=`mailto:${CONTACT.email}?subject=${encodeURIComponent(m.subject)}&body=${encodeURIComponent(m.body)}`;showLink(el.href);}
+    else if(via==="wa"){el.href=`https://wa.me/${CONTACT.wa}?text=${encodeURIComponent(m.body)}`;showLink(el.href);}
+    else if(via==="copy"){try{navigator.clipboard.writeText(m.body).then(()=>{el.textContent=t("copied");},()=>{});}catch(x){}}
+    else if(pr){el.disabled=true;pr.then(ok=>{const E=$("#fErr"); if(!E)return; E.textContent=ok?t("sentOk"):t("sentFail"); E.className=ok?"okmsg":"err on"; el.disabled=false;});}
+    return; }
+});
+
+/* dashboard: schede aggiuntive */
+const _adBook=adBook; adBook=function(){
+  const L=SP.map((x,i)=>Object.assign({i},x)).concat(RS);
+  return _adBook()+card("Richieste speciali: buoni regalo e gruppi",L.length?L.map(x=>`<div class="pl-r"><div><b>${x.type==="gift"?"Buono regalo · CHF "+escH(x.amount):"Gruppo · "+fmtDate(x.date)+" · "+escH(x.people)+" persone"}</b><span>${escH(x.name)} · ${escH(x.phone)}${x.type==="gift"&&x.forName?" · per "+escH(x.forName):""}${x.type!=="gift"&&x.notes?" · "+escH(x.notes):""} · ${new Date(x.ts).toLocaleDateString("it")}</span></div>${x.remote?"":`<button data-a="spDel:${x.i}" aria-label="Elimina">×</button>`}</div>`).join(""):`<p class="ad-empty">Nessuna richiesta di buoni regalo o gruppi.</p>`);
+};
+const _adCont=adCont; adCont=function(){
+  return _adCont()+`<div class="ad-2">${card("Itinerari consigliati",`${A.itins.length?A.itins.map((x,i)=>`<div class="pl-r"><div><b>${escH(x.title)}${x.dur?" · "+escH(x.dur):""}</b><span>${escH(x.text)}</span></div><button data-a="itDel:${i}" aria-label="Elimina">×</button></div>`).join(""):`<p class="ad-empty">Nessun itinerario. Quelli che aggiungi compaiono in Home e in Preparati.</p>`}<div class="ad-f2" style="margin-top:8px"><label>Titolo<input id="itT" placeholder="Es. Isole di Brissago"></label><label>Durata<input id="itD" placeholder="Es. mezza giornata"></label></div><label class="ad-l">Descrizione<textarea id="itX" rows="3"></textarea></label><button class="ad-btn" data-a="itAdd">Aggiungi itinerario</button>`)}
+  ${card("Recensioni e buoni regalo",`<label class="ad-l" style="margin-top:0">Link alle recensioni Google<input data-c="revUrl" value="${escH(A.reviewUrl)}" placeholder="Incolla il link del profilo Google"></label><p class="ad-note">Senza link, il pulsante apre la ricerca del noleggio su Google Maps.</p><label class="sw row"><input type="checkbox" data-c="giftOn" ${A.giftOn!==false?"checked":""}><i></i><span>Mostra i buoni regalo in Home</span></label>`)}</div>`;
+};
+const _adSet=adSet; adSet=function(){
+  const c=sbCfg(),baked=!!SB_BAKED.url;
+  return _adSet()+`<div class="ad-2">${card("Lingua della dashboard",`<select data-c="admLang"><option value="it" ${A.lang!=="de"?"selected":""}>Italiano</option><option value="de" ${A.lang==="de"?"selected":""}>Deutsch</option></select>`)}
+  ${card("Disponibilità automatica",`<label class="sw row"><input type="checkbox" data-c="autoBlock" ${A.autoBlock!==false?"checked":""}><i></i><span>Una prenotazione confermata blocca il mezzo in quella data</span></label><p class="ad-note">Vale per i mezzi con un solo esemplare. SUP e waterbike si bloccano quando sono tutti prenotati; il pedalò non si blocca.</p>`)}
+  ${card("Database Supabase",`<p class="sbst ${sbOn()?"on":"off"}">${sbOn()?(baked?"Collegato: configurato nell'app":"Configurato su questo dispositivo")+(sbTok?" · accesso gestore attivo":""):"Non collegato: i dati restano su questo dispositivo"}</p>${baked?"":`<label class="ad-l">Indirizzo del progetto<input id="sbUrl" value="${escH(c.url)}" placeholder="https://xxxx.supabase.co"></label><label class="ad-l">Chiave pubblica (anon)<input id="sbKey" value="${escH(c.key)}"></label><p class="ad-err" id="sbErr"></p><button class="ad-btn" data-a="sbSave">Salva e prova il collegamento</button>`}<p class="ad-note">Con il database attivo, richieste, prezzi, date e avvisi sono condivisi tra tutti i dispositivi e il lucchetto chiede e-mail e password al posto del passcode.</p>`)}
+  ${card("Acconto online",`<label class="sw row"><input type="checkbox" data-c="depOn" ${A.dep.on?"checked":""}><i></i><span>Chiedi un acconto nel riepilogo</span></label><div class="ad-f2"><label>Percentuale<input type="number" min="1" max="100" data-c="depPct" value="${escH(A.dep.pct)}"></label><label>Link di pagamento<input data-c="depUrl" value="${escH(A.dep.url)}" placeholder="https://"></label></div><p class="ad-note">Serve un link di pagamento del noleggio (per esempio Twint, Payrexx o Stripe). Finché manca, l'acconto non compare.</p>`)}
+  ${card("Avviso automatico al noleggio",`<label class="ad-l" style="margin-top:0">Indirizzo del servizio di invio<input data-c="notifyUrl" value="${escH(A.notifyUrl)}" placeholder="https://formspree.io/f/..."></label><p class="ad-note">Con un indirizzo Formspree (o simile), ogni richiesta arriva via e-mail al noleggio senza passare dal telefono del cliente.</p>`)}</div>`;
+};
+$("#admin").addEventListener("click",e=>{
+  const el=e.target.closest("[data-a]"); if(!el) return; const p=el.dataset.a.split(":"),a=p[0],g=id=>document.getElementById(id);
+  if(a==="itAdd"){const title=g("itT").value.trim(),text=g("itX").value.trim(); if(title&&text){A.itins.push({title,dur:g("itD").value.trim(),text});saveA();renderAdmin(true);} return;}
+  if(a==="itDel"){A.itins.splice(+p[1],1);saveA();renderAdmin(true);return;}
+  if(a==="spDel"){SP.splice(+p[1],1);store.set("tnb-sp",SP);renderAdmin(true);return;}
+  if(a==="st"&&p[1].charAt(0)==="R"){sb("/rest/v1/requests?id=eq."+encodeURIComponent(p[1].slice(1)),{method:"PATCH",headers:{Prefer:"return=minimal"},body:{status:p[2]}}).catch(()=>{});return;}
+  if(a==="sbSave"){const E=g("sbErr");A.sb={url:g("sbUrl").value.trim(),key:g("sbKey").value.trim()};store.set("tnb-adm",A); if(!sbOn()){renderAdmin(true);return;}
+    E.className="ad-err";E.textContent="Provo il collegamento…"; sb("/rest/v1/settings?id=eq.1&select=id").then(()=>{E.className="ad-err ad-ok";E.textContent="Collegamento riuscito.";},x=>{E.textContent="Collegamento non riuscito ("+x.message.slice(0,80)+"). Controlla indirizzo, chiave e tabelle.";});return;}
+});
+$("#admin").addEventListener("change",e=>{
+  const el=e.target,c=el.dataset.c; if(!c) return; const v=el.type==="checkbox"?el.checked:el.value;
+  if(c==="revUrl"){const u=String(v).trim();A.reviewUrl=/^https:\/\//.test(u)?u:"";saveA();return;}
+  if(c==="giftOn"){A.giftOn=v;saveA();return;}
+  if(c==="admLang"){A.lang=v;saveA();renderAdmin(true);return;}
+  if(c==="autoBlock"){A.autoBlock=v;saveA();return;}
+  if(c==="depOn"){A.dep.on=v;saveA();return;}
+  if(c==="depPct"){const n=Math.round(+v); if(n>=1&&n<=100){A.dep.pct=n;saveA();} return;}
+  if(c==="depUrl"){A.dep.url=String(v).trim();saveA();return;}
+  if(c==="notifyUrl"){const u=String(v).trim();A.notifyUrl=/^https:\/\//.test(u)?u:"";saveA();return;}
+});
+
+/* dashboard in tedesco: traduzione dei testi dopo ogni disegno */
+const ADM_D={"+ Prenotazione telefonica": "+ Telefonische Buchung", "Abbandono nel modulo": "Abbruch im Formular", "Acconto online": "Online-Anzahlung", "Aggiungi codice": "Code hinzufügen", "Aggiungi domanda": "Frage hinzufügen", "Aggiungi itinerario": "Route hinzufügen", "Aggiunte ai preferiti": "Zu Favoriten hinzugefügt", "Al": "Bis", "Apertura stagione": "Saisonstart", "Apertura stagione (Instagram)": "Saisonstart (Instagram)", "Apri il centro notifiche": "Mitteilungszentrale öffnen", "Attuale": "Aktuell", "Avviso automatico al noleggio": "Automatische Meldung an die Vermietung", "Avviso importante": "Wichtiger Hinweis", "Avviso in Home": "Hinweis auf Home", "Azioni dei visitatori": "Aktionen der Besucher", "Azioni rapide": "Schnellaktionen", "Azzera i dati di questo dispositivo": "Daten dieses Geräts zurücksetzen", "Blocca queste date": "Diese Daten sperren", "Cambia passcode": "Passcode ändern", "Campagna": "Kampagne", "Cellulare": "Mobile", "Chiamate avviate": "Gestartete Anrufe", "Chiave pubblica (anon)": "Öffentlicher Schlüssel (anon)", "Chiedi un acconto nel riepilogo": "Anzahlung in der Übersicht verlangen", "Chiedi una recensione": "Um Bewertung bitten", "Chiudi": "Schliessen", "Clic": "Klicks", "Codice": "Code", "Codici promo": "Promo-Codes", "Completata": "Abgeschlossen", "Conferma": "Bestätigen", "Confermata": "Bestätigt", "Confronti": "Vergleiche", "Contatti": "Kontakt", "Contenuti": "Inhalte", "Conversione": "Konversion", "Copia": "Kopieren", "Copia link": "Link kopieren", "Cosa vuoi ricevere": "Was möchtest du erhalten", "Crea promo": "Promo erstellen", "Da": "Von", "Da visita a richiesta": "Vom Besuch zur Anfrage", "Dal": "Vom", "Data": "Datum", "Database Supabase": "Supabase-Datenbank", "Dati demo": "Demo-Daten", "Dati inseriti": "Daten eingegeben", "Descrizione": "Beschreibung", "Disponibile": "Verfügbar", "In manutenzione": "In Wartung", "Disponibilità automatica": "Automatische Verfügbarkeit", "Disponibilità: blocca date": "Verfügbarkeit: Daten sperren", "Dispositivi": "Geräte", "Domanda": "Frage", "Domande frequenti aggiuntive": "Zusätzliche häufige Fragen", "Durata": "Dauer", "E-mail avviate": "Gestartete E-Mails", "Esci": "Beenden", "Esporta e azzera": "Exportieren und zurücksetzen", "Esporta prenotazioni (CSV)": "Buchungen exportieren (CSV)", "Flotta": "Flotte", "Flotta e prezzi": "Flotte und Preise", "Flotta vista": "Flotte angesehen", "Flusso verso la prenotazione": "Weg zur Buchung", "Genera link e QR": "Link und QR erzeugen", "Gestisci richieste": "Anfragen verwalten", "Impostazioni": "Einstellungen", "Indirizzo del progetto": "Projektadresse", "Indirizzo del servizio di invio": "Adresse des Versanddienstes", "Informazione": "Information", "Itinerari consigliati": "Empfohlene Routen", "Last minute bel tempo": "Last Minute bei Schönwetter", "Lingua della dashboard": "Sprache des Dashboards", "Lingue": "Sprachen", "Link alle recensioni Google": "Link zu den Google-Bewertungen", "Link di pagamento": "Zahlungslink", "Link tracciato e QR code": "Tracking-Link und QR-Code", "Mappa aperta": "Karte geöffnet", "Messaggio pronto": "Fertige Nachricht", "Meteo": "Wetter", "Mezzi più visti": "Meistgesehene Fahrzeuge", "Mezzo": "Fahrzeug", "Modifica prezzi": "Preise ändern", "Mostra i buoni regalo in Home": "Geschenkgutscheine auf Home zeigen", "Mostra i dati di esempio": "Beispieldaten zeigen", "Mostra il pulsante WhatsApp nel modulo": "WhatsApp-Schaltfläche im Formular zeigen", "Mostra l'avviso": "Hinweis zeigen", "Motivo (solo per te)": "Grund (nur für dich)", "Nome del cliente": "Name des Kunden", "Nota interna": "Interne Notiz", "Note": "Bemerkungen", "Notifiche": "Mitteilungen", "Nuova": "Neu", "Rifiutata": "Abgelehnt", "Nuova prenotazione telefonica": "Neue telefonische Buchung", "Nuovo (4 cifre)": "Neu (4 Ziffern)", "Offerta infrasettimanale": "Angebot unter der Woche", "Offerta infrasettimanale (WhatsApp)": "Angebot unter der Woche (WhatsApp)", "Ora": "Zeit", "Orari di punta": "Stosszeiten", "Pagine più viste": "Meistgesehene Seiten", "Panoramica": "Übersicht", "Percentuale": "Prozentsatz", "Persone": "Personen", "Prenotazione aperta": "Buchung geöffnet", "Prenotazioni": "Buchungen", "Prenotazioni per stato": "Buchungen nach Status", "Prepara CSV": "CSV erstellen", "Prepara esportazione": "Export erstellen", "Preparati": "Bereit?", "Promo in scadenza": "Promo läuft ab", "Promozione": "Aktion", "Prossimi 7 giorni": "Nächste 7 Tage", "Pubblica avviso": "Hinweis veröffentlichen", "QR code al molo": "QR-Code am Steg", "Recensioni e buoni regalo": "Bewertungen und Geschenkgutscheine", "Rendimento campagne": "Kampagnen-Ergebnisse", "Riapri": "Wieder öffnen", "Richiesta confermata": "Anfrage bestätigt", "Richiesta inviata": "Anfrage gesendet", "Richieste": "Anfragen", "Richieste inviate": "Gesendete Anfragen", "Richieste speciali: buoni regalo e gruppi": "Spezialanfragen: Geschenkgutscheine und Gruppen", "Richieste, 7 giorni": "Anfragen, 7 Tage", "Rifiuta": "Ablehnen", "Ripristina i prezzi del sito": "Preise der Website wiederherstellen", "Risposta": "Antwort", "Salva e prova il collegamento": "Speichern und Verbindung testen", "Salva prenotazione": "Buchung speichern", "Scadenza": "Ablauf", "Scheda mezzo": "Fahrzeugseite", "Sconto %": "Rabatt %", "Segna tutte come lette": "Alle als gelesen markieren", "Sistema": "System", "Sorgente": "Quelle", "Sorgenti di traffico": "Besucherquellen", "Stagione di noleggio": "Mietsaison", "Telefono": "Telefon", "Testo": "Text", "Tipo": "Art", "Titolo": "Titel", "Traffico e flusso": "Verkehr und Ablauf", "Tutti i mezzi": "Alle Fahrzeuge", "Ultime notifiche": "Letzte Mitteilungen", "Una prenotazione confermata blocca il mezzo in quella data": "Eine bestätigte Buchung sperrt das Fahrzeug an diesem Datum", "Valore richieste": "Wert der Anfragen", "Vento in aumento": "Wind nimmt zu", "Visite": "Besuche", "Visite al giorno, ultimi 30 giorni": "Besuche pro Tag, letzte 30 Tage", "Visite, 30 giorni": "Besuche, 30 Tage", "Visite, 7 giorni": "Besuche, 7 Tage", "Visite, ultimi 14 giorni": "Besuche, letzte 14 Tage", "WhatsApp (solo cifre)": "WhatsApp (nur Ziffern)", "Elimina": "Löschen", "Segna come letta": "Als gelesen markieren", "Cerca tra le prenotazioni": "Buchungen durchsuchen", "Cerca per nome, mezzo, telefono o data": "Suche nach Name, Fahrzeug, Telefon oder Datum", "Dati esportati": "Exportierte Daten", "Link tracciato": "Tracking-Link", "Prenotazioni in formato CSV": "Buchungen im CSV-Format", "Incolla il link del profilo Google": "Link des Google-Profils einfügen", "Es. Isole di Brissago": "z. B. Brissago-Inseln", "Es. Oggi chiuso per vento forte": "z. B. Heute wegen starkem Wind geschlossen", "Es. mezza giornata": "z. B. halber Tag", "Es. vento forte, evento privato": "z. B. starker Wind, privater Anlass", "Manutenzione conclusa.": "Wartung abgeschlossen.", "Raffiche previste oltre 30 km/h nel pomeriggio.": "Böen über 30 km/h am Nachmittag erwartet.", "Il codice LAGO10 scade tra 3 giorni.": "Der Code LAGO10 läuft in 3 Tagen ab.", "Open 7 di nuovo disponibile": "Open 7 wieder verfügbar", "Nessuna richiesta di buoni regalo o gruppi.": "Keine Anfragen für Geschenkgutscheine oder Gruppen.", "Nessuna richiesta in questo stato.": "Keine Anfrage in diesem Status.", "Nessuna notifica.": "Keine Mitteilungen.", "Ancora nessun dato.": "Noch keine Daten.", "Non collegato: i dati restano su questo dispositivo": "Nicht verbunden: die Daten bleiben auf diesem Gerät", "Richieste: nuove richieste di prenotazione": "Anfragen: neue Buchungsanfragen", "Meteo: raffiche oltre 30 km/h a Muralto": "Wetter: Böen über 30 km/h in Muralto", "Sistema: mezzi in manutenzione o di nuovo disponibili": "System: Fahrzeuge in Wartung oder wieder verfügbar", "Marketing: codici promo in scadenza": "Marketing: ablaufende Promo-Codes", "gennaio": "Januar", "febbraio": "Februar", "marzo": "März", "aprile": "April", "maggio": "Mai", "giugno": "Juni", "luglio": "Juli", "agosto": "August", "settembre": "September", "ottobre": "Oktober", "novembre": "November", "dicembre": "Dezember", "lun": "Mo", "mar": "Di", "mer": "Mi", "gio": "Do", "ven": "Fr", "sab": "Sa", "dom": "So", "Elimina ": "Löschen", "Tocca di nuovo per confermare": "Zum Bestätigen erneut tippen", "Copiato": "Kopiert"};
+const ADM_P=[["Dati demo attivi: i numeri", "Demo-Daten aktiv: Zahlen mit dem Etikett «demo» enthalten Beispieldaten, keine Messwerte. Ausschalten unter Einstellungen."], ["Le richieste reali sono quelle", "Echte Anfragen sind jene, die von diesem Gerät gesendet wurden. Ohne Server kommen die Anfragen anderer Kunden nur per E-Mail oder WhatsApp an."], ["Prezzi e disponibilità modificati", "Geänderte Preise und Verfügbarkeiten gelten für die App auf diesem Gerät."], ["Le misure reali riguardano", "Die echten Messwerte betreffen nur dieses Gerät. Für den Verkehr aller Besucher braucht es einen Server oder ein Statistik-Tool auf der Website."], ["Nessun codice. Creane uno", "Kein Code. Erstelle einen: der Kunde gibt ihn im Buchungsformular ein und der Rabatt erscheint in der Anfrage."], ["Se c'è un codice promo attivo", "Ist ein Promo-Code aktiv, wird er an die Nachricht angehängt."], ["Per misurare le campagne reali", "Um echte Kampagnen zu messen, braucht es einen Server oder ein Statistik-Tool."], ["Gli avvisi compaiono qui", "Hinweise erscheinen hier, wenn die App geöffnet ist. Push-Mitteilungen aufs Handy brauchen einen Server."], ["Le 4 domande di base", "Die 4 Grundfragen bleiben immer. Hier fügst du weitere hinzu."], ["Il passcode vale per questo", "Der Passcode gilt für dieses Gerät und lässt sich umgehen, wenn jemand den Code der App öffnet: er schützt keine vertraulichen Daten."], ["Fuori da questi mesi", "Ausserhalb dieser Monate zeigt das Buchungsformular den Hinweis «ausserhalb der Saison»."], ["Servono a presentare la dashboard", "Sie dienen zur Präsentation des Dashboards. Ausgeschaltet bleiben nur die auf diesem Gerät gemessenen Daten."], ["Incolla il testo in un file", "Füge den Text in eine .csv-Datei oder eine Tabelle ein (Trennzeichen: Strichpunkt)."], ["Nessuna data bloccata.", "Keine gesperrten Daten. An gesperrten Tagen kann der Kunde dieses Fahrzeug nicht anfragen."], ["Nessun itinerario.", "Keine Route. Hinzugefügte Routen erscheinen auf Home und unter «Bereit?»."], ["Senza link, il pulsante apre", "Ohne Link öffnet die Schaltfläche die Suche nach der Vermietung auf Google Maps."], ["Vale per i mezzi con un solo", "Gilt für Fahrzeuge mit nur einem Exemplar. SUP und Waterbike werden gesperrt, wenn alle gebucht sind; das Tretboot wird nicht gesperrt."], ["Con il database attivo", "Mit aktiver Datenbank werden Anfragen, Preise, Daten und Hinweise auf allen Geräten geteilt, und das Schloss verlangt E-Mail und Passwort statt des Passcodes."], ["Serve un link di pagamento", "Es braucht einen Zahlungslink der Vermietung (zum Beispiel Twint, Payrexx oder Stripe). Solange er fehlt, erscheint die Anzahlung nicht."], ["Con un indirizzo Formspree", "Mit einer Formspree-Adresse (oder ähnlich) kommt jede Anfrage per E-Mail bei der Vermietung an, ohne das Handy des Kunden."]];
+const ADM_R=[["Collegato: configurato nell'app", "Verbunden: in der App konfiguriert"], ["Configurato su questo dispositivo", "Auf diesem Gerät konfiguriert"], [" · accesso gestore attivo", " · Betreiber angemeldet"], ["Non lette (", "Ungelesen ("], ["Tutte (", "Alle ("], ["Nuova (", "Neu ("], ["Confermata (", "Bestätigt ("], ["Rifiutata (", "Abgelehnt ("], ["Completata (", "Abgeschlossen ("], ["Nuova richiesta: ", "Neue Anfrage: "], ["Richiesta buono regalo: ", "Anfrage Geschenkgutschein: "], ["Richiesta gruppo: ", "Gruppenanfrage: "], [" di nuovo disponibile", " wieder verfügbar"], [" in manutenzione", " in Wartung"], ["Richieste · ", "Anfragen · "], ["Meteo · ", "Wetter · "], ["Sistema · ", "System · "], [" · non letta", " · ungelesen"], ["via e-mail", "per E-Mail"], ["via WhatsApp", "per WhatsApp"], ["via telefono", "per Telefon"], ["via app", "per App"], ["via testo copiato", "Text kopiert"], ["sui 7 giorni prima", "ggü. den 7 Tagen davor"], ["% dal passo precedente", "% vom vorherigen Schritt"], ["Grafico a barre, massimo", "Balkendiagramm, Maximum"], ["Notifiche, ", "Mitteilungen, "], [" non lette", " ungelesen"], ["Buono regalo · ", "Geschenkgutschein · "], ["Gruppo · ", "Gruppe · "], [" persone", " Personen"], ["fino al ", "bis "], [" · scaduto", " · abgelaufen"], [" · promo ", " · Promo "], ["Elimina: ", "Löschen: "]];
+function trDe(x){
+  const tr=x.replace(/\s+/g," ").trim(); if(!tr) return x;
+  if(Object.prototype.hasOwnProperty.call(ADM_D,tr)) return x.replace(x.trim(),ADM_D[tr]);
+  for(const p of ADM_P) if(tr.indexOf(p[0])===0) return p[1];
+  let o=x; for(const r of ADM_R) if(o.indexOf(r[0])>=0) o=o.split(r[0]).join(r[1]);
+  return o.replace(/(\d+) min fa/g,"vor $1 Min.").replace(/(\d+) h fa/g,"vor $1 Std.").replace(/(\d+) g fa/g,"vor $1 T.").replace(/\badesso\b/g,"jetzt");
+}
+function trAdmin(root){
+  const tw=document.createTreeWalker(root,4); let n; const L=[];
+  while((n=tw.nextNode())) if(n.parentNode&&n.parentNode.nodeName!=="TEXTAREA"&&n.parentNode.nodeName!=="SCRIPT") L.push(n);
+  L.forEach(n=>{const v=trDe(n.nodeValue); if(v!==n.nodeValue) n.nodeValue=v;});
+  root.querySelectorAll("[placeholder],[aria-label]").forEach(e=>["placeholder","aria-label"].forEach(a=>{const v=e.getAttribute(a); if(v){const z=trDe(v); if(z!==v) e.setAttribute(a,z);}}));
+}
+ADM_D["Cliente demo 3 chiede 1 giornata per 6 persone."]="Demo-Kunde 3 fragt 1 Tag für 6 Personen an.";ADM_D["Cliente demo 1, Open 5, mezza giornata."]="Demo-Kunde 1, Open 5, halber Tag.";ADM_R.push(["Cliente demo ","Demo-Kunde "]);
+const _ra=renderAdmin; renderAdmin=function(k){ _ra(k); if(A.lang==="de") trAdmin($("#admin")); };
+if(sbOn()) sbLoadSettings();
 
 document.addEventListener("click",e=>{
   const m=$("#langMenu"),b=$("#langBtn"),tg=e.target.closest?e.target:e.target.parentNode;
